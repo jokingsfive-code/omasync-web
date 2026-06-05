@@ -56,14 +56,14 @@ function Login() {
             </div>
 
             <h1 className="text-6xl font-bold leading-tight mb-6">
-              Manage Properties
+              Smart Channel
               <br />
-              Smarter.
+              Manager.
             </h1>
 
             <p className="text-lg text-white/80 max-w-md leading-relaxed">
-              A modern dashboard for property operations, calendar scheduling,
-              financial tracking and business reporting.
+              Synchronize bookings, rates and availability across Airbnb,
+              Booking.com, Agoda and direct reservations from a single platform.
             </p>
           </div>
 
@@ -77,13 +77,13 @@ function Login() {
             <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5">
               <CalendarDays className="mb-3" size={26} />
               <h3 className="font-bold">Calendar</h3>
-              <p className="text-sm text-white/70">Track events</p>
+              <p className="text-sm text-white/70">Sync availability</p>
             </div>
 
             <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5">
               <Wallet className="mb-3" size={26} />
-              <h3 className="font-bold">Finance</h3>
-              <p className="text-sm text-white/70">Monitor cashflow</p>
+              <h3 className="font-bold">Rates</h3>
+              <p className="text-sm text-white/70">Control pricing</p>
             </div>
 
             <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-5">
@@ -125,7 +125,7 @@ function Login() {
               OmaSync
             </h2>
             <p className="text-gray-500 mt-2">
-              Sign in to your workspace
+              Sign in to your channel manager
             </p>
           </div>
 
@@ -187,7 +187,7 @@ function Login() {
           </form>
 
           <p className="text-center text-xs text-gray-400 mt-8">
-            © 2026 OmaSync. Property Management System.
+            © 2026 OmaSync. Smart Channel Manager.
           </p>
         </div>
       </div>
