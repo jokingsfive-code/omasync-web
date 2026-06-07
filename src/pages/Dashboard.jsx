@@ -226,7 +226,7 @@ export default function Dashboard() {
       <Sidebar />
 
       <div
-        className="flex-1 p-4 pt-20 md:p-8 md:pt-8 min-h-screen"
+        className="flex-1 p-3 pt-20 md:p-8 md:pt-8 min-h-screen"
         style={{
           background:
             "radial-gradient(circle at top left, rgba(127,157,177,0.35), transparent 35%), radial-gradient(circle at bottom right, rgba(13,59,102,0.15), transparent 35%), linear-gradient(135deg, #F3F6F8 0%, #E8EEF2 45%, #DCE7ED 100%)",
@@ -353,7 +353,7 @@ export default function Dashboard() {
                     key={property.id}
                     className="block p-5 rounded-2xl bg-white/10 border border-white/20 hover:bg-white/20 transition"
                   >
-                    <div className="flex justify-between mb-3">
+                    <div className="flex flex-col md:flex-row md:justify-between gap-3 mb-3">
                       <div>
                         <h3 className="font-bold text-lg">{property.name}</h3>
                         <p className="text-blue-100 text-sm">
@@ -369,7 +369,7 @@ export default function Dashboard() {
                       </div>
                     </div>
 
-                    <div className="flex justify-between text-sm mb-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm mb-2">
                       <span>Bookings: {property.bookings}</span>
                       <span>Occupancy: {property.occupancy}%</span>
                       <span className="text-green-300 font-bold">Active</span>
@@ -390,7 +390,7 @@ export default function Dashboard() {
           <div className="rounded-3xl p-6 shadow-2xl bg-gradient-to-br from-slate-900 to-slate-800 text-white flex flex-col min-h-[430px]">
             <h2 className="text-2xl font-bold mb-6">Quick Actions</h2>
 
-            <div className="grid grid-rows-4 gap-4 flex-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-4 flex-1">
               <Link
                 to="/reservations"
                 className="bg-gradient-to-r from-[#0D3B66] to-[#1B5E9E] rounded-2xl font-bold flex items-center justify-center gap-3 hover:scale-[1.02] active:scale-[0.98] transition shadow-lg"
@@ -427,7 +427,7 @@ export default function Dashboard() {
         </div>
 
         <div className="mt-8 rounded-[32px] shadow-2xl p-7 border border-white/70 bg-white/90 backdrop-blur-xl">
-          <div className="flex justify-between items-start mb-7">
+          <div className="flex flex-col md:flex-row md:justify-between gap-4 mb-7">
             <div>
               <h2 className="text-2xl font-bold text-[#0D3B66]">
                 Upcoming Arrivals
@@ -457,7 +457,7 @@ export default function Dashboard() {
                   key={reservation.id}
                   className="bg-white rounded-3xl p-5 shadow-md border border-gray-100 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
                 >
-                  <div className="flex items-start justify-between gap-5">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                     <div className="flex items-center gap-4">
                       <div
                         className="w-14 h-14 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg"
@@ -526,7 +526,7 @@ export default function Dashboard() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between mt-5">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-5">
                     <span className="px-3 py-1.5 rounded-full bg-green-100 text-green-700 text-xs font-bold">
                       {reservation.status}
                     </span>
