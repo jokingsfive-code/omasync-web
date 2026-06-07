@@ -13,32 +13,26 @@ import {
 const channelColors = {
   airbnb: {
     main: "bg-rose-500 border-rose-600 text-white",
-    soft: "bg-rose-100 text-rose-700 border-rose-200",
     dot: "bg-rose-500",
   },
   booking: {
     main: "bg-blue-600 border-blue-700 text-white",
-    soft: "bg-blue-100 text-blue-700 border-blue-200",
     dot: "bg-blue-600",
   },
   agoda: {
     main: "bg-purple-600 border-purple-700 text-white",
-    soft: "bg-purple-100 text-purple-700 border-purple-200",
     dot: "bg-purple-600",
   },
   direct: {
     main: "bg-emerald-600 border-emerald-700 text-white",
-    soft: "bg-emerald-100 text-emerald-700 border-emerald-200",
     dot: "bg-emerald-600",
   },
   website: {
     main: "bg-amber-500 border-amber-600 text-white",
-    soft: "bg-amber-100 text-amber-700 border-amber-200",
     dot: "bg-amber-500",
   },
   other: {
     main: "bg-slate-600 border-slate-700 text-white",
-    soft: "bg-slate-100 text-slate-700 border-slate-200",
     dot: "bg-slate-600",
   },
 };
@@ -111,6 +105,7 @@ export default function Calendar() {
     const y = date.getFullYear();
     const m = String(date.getMonth() + 1).padStart(2, "0");
     const d = String(date.getDate()).padStart(2, "0");
+
     return `${y}-${m}-${d}`;
   };
 
@@ -217,283 +212,285 @@ export default function Calendar() {
   const selectedBookings = selectedDate ? getBookingsForDate(selectedDate) : [];
 
   return (
-    <div className="min-h-screen bg-[#f7f8fb] overflow-x-hidden">
+    <div className="min-h-screen bg-[#f7f8fb]">
       <Sidebar />
 
-      <main className="min-h-screen lg:ml-64 px-3 sm:px-6 lg:px-8 py-5 lg:py-8 overflow-x-hidden">
-        <div className="w-full max-w-[1600px] mx-auto">
-          <div className="mb-5 sm:mb-6 pl-20 sm:pl-0">
-            <div className="flex items-center gap-4">
-              <div className="hidden sm:flex w-11 h-11 rounded-2xl bg-black text-white items-center justify-center shadow-sm">
-                <CalendarDays size={22} />
-              </div>
+      <main className="w-full min-h-screen lg:pl-64">
+        <div className="w-full px-3 sm:px-6 lg:px-8 py-5 lg:py-8">
+          <div className="w-full max-w-[1600px] mx-auto">
+            <div className="mb-5 sm:mb-6 pl-20 sm:pl-0">
+              <div className="flex items-center gap-4">
+                <div className="hidden sm:flex w-11 h-11 rounded-2xl bg-black text-white items-center justify-center shadow-sm">
+                  <CalendarDays size={22} />
+                </div>
 
-              <div>
-                <h1 className="text-3xl sm:text-4xl font-black text-gray-950 tracking-tight">
-                  Calendar
-                </h1>
-                <p className="text-sm sm:text-base text-gray-500">
-                  Airbnb style booking calendar.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="w-full bg-white rounded-[26px] sm:rounded-[30px] border border-gray-100 shadow-sm overflow-hidden">
-            <div className="px-4 sm:px-6 py-5 border-b border-gray-100 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
-              <div>
-                <h2 className="text-2xl sm:text-3xl font-black text-gray-950">
-                  {monthName}
-                </h2>
-                <p className="text-sm text-gray-500">
-                  Tap future date to view booking details.
-                </p>
-              </div>
-
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={goPrevMonth}
-                  className="w-11 h-11 rounded-full border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 active:scale-95 transition"
-                >
-                  <ChevronLeft size={20} />
-                </button>
-
-                <button
-                  onClick={goToday}
-                  className="h-11 px-5 rounded-full bg-black text-white text-sm font-bold hover:bg-gray-800 active:scale-95 transition"
-                >
-                  Today
-                </button>
-
-                <button
-                  onClick={goNextMonth}
-                  className="w-11 h-11 rounded-full border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 active:scale-95 transition"
-                >
-                  <ChevronRight size={20} />
-                </button>
+                <div>
+                  <h1 className="text-3xl sm:text-4xl font-black text-gray-950 tracking-tight">
+                    Calendar
+                  </h1>
+                  <p className="text-sm sm:text-base text-gray-500">
+                    Airbnb style booking calendar.
+                  </p>
+                </div>
               </div>
             </div>
 
-            <div className="px-4 sm:px-6 py-4 border-b border-gray-100 overflow-x-auto">
-              <div className="flex items-center gap-4 min-w-max">
-                {channelLabels.map((channel) => {
-                  const key = channel.toLowerCase();
+            <div className="w-full bg-white rounded-[26px] sm:rounded-[30px] border border-gray-100 shadow-sm overflow-hidden">
+              <div className="px-4 sm:px-6 py-5 border-b border-gray-100 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+                <div>
+                  <h2 className="text-2xl sm:text-3xl font-black text-gray-950">
+                    {monthName}
+                  </h2>
+                  <p className="text-sm text-gray-500">
+                    Tap future date to view booking details.
+                  </p>
+                </div>
 
-                  return (
-                    <div
-                      key={channel}
-                      className="flex items-center gap-2 text-xs sm:text-sm text-gray-600"
-                    >
-                      <span
-                        className={`w-3 h-3 rounded-full ${
-                          channelColors[key]?.dot || channelColors.other.dot
-                        }`}
-                      />
-                      {channel}
-                    </div>
-                  );
-                })}
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={goPrevMonth}
+                    className="w-11 h-11 rounded-full border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 active:scale-95 transition"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+
+                  <button
+                    onClick={goToday}
+                    className="h-11 px-5 rounded-full bg-black text-white text-sm font-bold hover:bg-gray-800 active:scale-95 transition"
+                  >
+                    Today
+                  </button>
+
+                  <button
+                    onClick={goNextMonth}
+                    className="w-11 h-11 rounded-full border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 active:scale-95 transition"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                </div>
               </div>
-            </div>
 
-            {loading ? (
-              <div className="h-[420px] flex flex-col items-center justify-center text-gray-500">
-                <Loader2 className="animate-spin mb-3" size={32} />
-                <p className="text-sm">Loading calendar...</p>
-              </div>
-            ) : (
-              <div className="p-2 sm:p-4">
-                <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
-                  {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
-                    (day) => (
-                      <div
-                        key={day}
-                        className="h-8 sm:h-10 flex items-center justify-center text-[10px] sm:text-xs font-black text-gray-400 uppercase tracking-wide"
-                      >
-                        {day}
-                      </div>
-                    )
-                  )}
-
-                  {calendarDays.map((date, index) => {
-                    const bookings = getBookingsForDate(date);
-                    const hasBooking = bookings.length > 0;
-                    const past = date ? isPastDate(date) : false;
-                    const active =
-                      selectedDate &&
-                      date &&
-                      formatDate(selectedDate) === formatDate(date);
-
-                    const mainStyle = hasBooking
-                      ? getChannelStyle(bookings[0])
-                      : null;
+              <div className="px-4 sm:px-6 py-4 border-b border-gray-100 overflow-x-auto">
+                <div className="flex items-center gap-4 min-w-max">
+                  {channelLabels.map((channel) => {
+                    const key = channel.toLowerCase();
 
                     return (
-                      <button
-                        key={index}
-                        type="button"
-                        disabled={!date || past}
-                        onClick={() => {
-                          if (date && !past) setSelectedDate(date);
-                        }}
-                        className={`min-h-[78px] sm:min-h-[150px] rounded-2xl sm:rounded-3xl p-1.5 sm:p-3 text-left transition border relative overflow-hidden ${
-                          !date
-                            ? "bg-transparent border-transparent"
-                            : past
-                            ? "bg-gray-50 border-gray-100 opacity-35 cursor-not-allowed"
-                            : active
-                            ? "bg-gray-950 border-gray-950 shadow-lg"
-                            : hasBooking
-                            ? `${mainStyle.main} shadow-md hover:shadow-lg active:scale-[0.98]`
-                            : "bg-white border-gray-100 hover:border-gray-300 hover:shadow-sm active:scale-[0.98]"
-                        }`}
+                      <div
+                        key={channel}
+                        className="flex items-center gap-2 text-xs sm:text-sm text-gray-600"
                       >
-                        {date && (
-                          <>
-                            <div className="flex items-center justify-between mb-1.5 sm:mb-3">
-                              <div
-                                className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[11px] sm:text-sm font-black ${
-                                  active
-                                    ? "bg-white text-black"
-                                    : hasBooking && !past
-                                    ? "bg-white/95 text-gray-950"
-                                    : isToday(date)
-                                    ? "bg-black text-white"
-                                    : "text-gray-900"
-                                }`}
-                              >
-                                {date.getDate()}
-                              </div>
-
-                              {hasBooking && (
-                                <span
-                                  className={`text-[9px] sm:text-xs font-black ${
-                                    hasBooking && !past
-                                      ? "text-white"
-                                      : "text-gray-400"
-                                  }`}
-                                >
-                                  {bookings.length}
-                                </span>
-                              )}
-                            </div>
-
-                            {hasBooking && !past && (
-                              <div className="space-y-1 sm:space-y-1.5">
-                                {bookings.slice(0, 2).map((booking) => (
-                                  <div
-                                    key={booking.id}
-                                    className="rounded-xl px-1.5 sm:px-2 py-1 sm:py-1.5 text-[8.5px] sm:text-[11px] leading-tight border border-white/30 bg-white/20 text-white shadow-sm"
-                                  >
-                                    <div className="font-black truncate">
-                                      {getBookingName(booking)}
-                                    </div>
-
-                                    <div className="hidden sm:flex items-center gap-1 opacity-90 truncate">
-                                      <Home size={10} />
-                                      <span className="truncate">
-                                        {getPropertyName(booking.property_id)}
-                                      </span>
-                                    </div>
-
-                                    <div className="hidden sm:block text-[10px] opacity-90 truncate">
-                                      {getBookingChannel(booking)}
-                                    </div>
-                                  </div>
-                                ))}
-
-                                {bookings.length > 2 && (
-                                  <div className="text-[9px] sm:text-xs font-bold px-1 text-white">
-                                    +{bookings.length - 2} more
-                                  </div>
-                                )}
-                              </div>
-                            )}
-                          </>
-                        )}
-                      </button>
+                        <span
+                          className={`w-3 h-3 rounded-full ${
+                            channelColors[key]?.dot || channelColors.other.dot
+                          }`}
+                        />
+                        {channel}
+                      </div>
                     );
                   })}
                 </div>
               </div>
-            )}
-          </div>
 
-          {selectedDate && (
-            <div className="mt-4 bg-white rounded-[24px] border border-gray-100 shadow-sm p-4 sm:p-5">
-              <div className="flex items-start justify-between gap-4 mb-4">
-                <div>
-                  <h3 className="text-lg sm:text-xl font-black text-gray-950">
-                    {selectedDate.toLocaleDateString("en-US", {
-                      weekday: "long",
-                      month: "long",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
-                  </h3>
-                  <p className="text-sm text-gray-500">
-                    {selectedBookings.length} booking found.
-                  </p>
-                </div>
-
-                <button
-                  onClick={() => setSelectedDate(null)}
-                  className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition"
-                >
-                  <X size={18} />
-                </button>
-              </div>
-
-              {selectedBookings.length === 0 ? (
-                <div className="rounded-2xl bg-gray-50 border border-gray-100 p-4 text-sm text-gray-500">
-                  No booking on this date.
+              {loading ? (
+                <div className="h-[420px] flex flex-col items-center justify-center text-gray-500">
+                  <Loader2 className="animate-spin mb-3" size={32} />
+                  <p className="text-sm">Loading calendar...</p>
                 </div>
               ) : (
-                <div className="space-y-3">
-                  {selectedBookings.map((booking) => (
-                    <div
-                      key={booking.id}
-                      className="rounded-2xl border border-gray-100 p-4 flex items-start justify-between gap-3"
-                    >
-                      <div>
-                        <div className="font-black text-gray-950">
-                          {getBookingName(booking)}
+                <div className="p-2 sm:p-4">
+                  <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
+                    {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
+                      (day) => (
+                        <div
+                          key={day}
+                          className="h-8 sm:h-10 flex items-center justify-center text-[10px] sm:text-xs font-black text-gray-400 uppercase tracking-wide"
+                        >
+                          {day}
                         </div>
+                      )
+                    )}
 
-                        <div className="text-sm text-gray-500 mt-1">
-                          {getPropertyName(booking.property_id)}
-                        </div>
+                    {calendarDays.map((date, index) => {
+                      const bookings = getBookingsForDate(date);
+                      const hasBooking = bookings.length > 0;
+                      const past = date ? isPastDate(date) : false;
+                      const active =
+                        selectedDate &&
+                        date &&
+                        formatDate(selectedDate) === formatDate(date);
 
-                        <div className="text-xs text-gray-400 mt-1">
-                          {cleanDate(
-                            booking.check_in ||
-                              booking.checkin_date ||
-                              booking.start_date ||
-                              booking.arrival_date
-                          )}{" "}
-                          →{" "}
-                          {cleanDate(
-                            booking.check_out ||
-                              booking.checkout_date ||
-                              booking.end_date ||
-                              booking.departure_date
+                      const mainStyle = hasBooking
+                        ? getChannelStyle(bookings[0])
+                        : null;
+
+                      return (
+                        <button
+                          key={index}
+                          type="button"
+                          disabled={!date || past}
+                          onClick={() => {
+                            if (date && !past) setSelectedDate(date);
+                          }}
+                          className={`min-h-[78px] sm:min-h-[150px] rounded-2xl sm:rounded-3xl p-1.5 sm:p-3 text-left transition border relative overflow-hidden ${
+                            !date
+                              ? "bg-transparent border-transparent"
+                              : past
+                              ? "bg-gray-50 border-gray-100 opacity-35 cursor-not-allowed"
+                              : active
+                              ? "bg-gray-950 border-gray-950 shadow-lg"
+                              : hasBooking
+                              ? `${mainStyle.main} shadow-md hover:shadow-lg active:scale-[0.98]`
+                              : "bg-white border-gray-100 hover:border-gray-300 hover:shadow-sm active:scale-[0.98]"
+                          }`}
+                        >
+                          {date && (
+                            <>
+                              <div className="flex items-center justify-between mb-1.5 sm:mb-3">
+                                <div
+                                  className={`w-6 h-6 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[11px] sm:text-sm font-black ${
+                                    active
+                                      ? "bg-white text-black"
+                                      : hasBooking && !past
+                                      ? "bg-white/95 text-gray-950"
+                                      : isToday(date)
+                                      ? "bg-black text-white"
+                                      : "text-gray-900"
+                                  }`}
+                                >
+                                  {date.getDate()}
+                                </div>
+
+                                {hasBooking && (
+                                  <span
+                                    className={`text-[9px] sm:text-xs font-black ${
+                                      hasBooking && !past
+                                        ? "text-white"
+                                        : "text-gray-400"
+                                    }`}
+                                  >
+                                    {bookings.length}
+                                  </span>
+                                )}
+                              </div>
+
+                              {hasBooking && !past && (
+                                <div className="space-y-1 sm:space-y-1.5">
+                                  {bookings.slice(0, 2).map((booking) => (
+                                    <div
+                                      key={booking.id}
+                                      className="rounded-xl px-1.5 sm:px-2 py-1 sm:py-1.5 text-[8.5px] sm:text-[11px] leading-tight border border-white/30 bg-white/20 text-white shadow-sm"
+                                    >
+                                      <div className="font-black truncate">
+                                        {getBookingName(booking)}
+                                      </div>
+
+                                      <div className="hidden sm:flex items-center gap-1 opacity-90 truncate">
+                                        <Home size={10} />
+                                        <span className="truncate">
+                                          {getPropertyName(booking.property_id)}
+                                        </span>
+                                      </div>
+
+                                      <div className="hidden sm:block text-[10px] opacity-90 truncate">
+                                        {getBookingChannel(booking)}
+                                      </div>
+                                    </div>
+                                  ))}
+
+                                  {bookings.length > 2 && (
+                                    <div className="text-[9px] sm:text-xs font-bold px-1 text-white">
+                                      +{bookings.length - 2} more
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                            </>
                           )}
-                        </div>
-                      </div>
-
-                      <span
-                        className={`shrink-0 rounded-full px-3 py-1 text-xs font-black border ${
-                          getChannelStyle(booking).main
-                        }`}
-                      >
-                        {getBookingChannel(booking)}
-                      </span>
-                    </div>
-                  ))}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
               )}
             </div>
-          )}
+
+            {selectedDate && (
+              <div className="mt-4 bg-white rounded-[24px] border border-gray-100 shadow-sm p-4 sm:p-5">
+                <div className="flex items-start justify-between gap-4 mb-4">
+                  <div>
+                    <h3 className="text-lg sm:text-xl font-black text-gray-950">
+                      {selectedDate.toLocaleDateString("en-US", {
+                        weekday: "long",
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </h3>
+                    <p className="text-sm text-gray-500">
+                      {selectedBookings.length} booking found.
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={() => setSelectedDate(null)}
+                    className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition"
+                  >
+                    <X size={18} />
+                  </button>
+                </div>
+
+                {selectedBookings.length === 0 ? (
+                  <div className="rounded-2xl bg-gray-50 border border-gray-100 p-4 text-sm text-gray-500">
+                    No booking on this date.
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {selectedBookings.map((booking) => (
+                      <div
+                        key={booking.id}
+                        className="rounded-2xl border border-gray-100 p-4 flex items-start justify-between gap-3"
+                      >
+                        <div>
+                          <div className="font-black text-gray-950">
+                            {getBookingName(booking)}
+                          </div>
+
+                          <div className="text-sm text-gray-500 mt-1">
+                            {getPropertyName(booking.property_id)}
+                          </div>
+
+                          <div className="text-xs text-gray-400 mt-1">
+                            {cleanDate(
+                              booking.check_in ||
+                                booking.checkin_date ||
+                                booking.start_date ||
+                                booking.arrival_date
+                            )}{" "}
+                            →{" "}
+                            {cleanDate(
+                              booking.check_out ||
+                                booking.checkout_date ||
+                                booking.end_date ||
+                                booking.departure_date
+                            )}
+                          </div>
+                        </div>
+
+                        <span
+                          className={`shrink-0 rounded-full px-3 py-1 text-xs font-black border ${
+                            getChannelStyle(booking).main
+                          }`}
+                        >
+                          {getBookingChannel(booking)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </main>
     </div>
