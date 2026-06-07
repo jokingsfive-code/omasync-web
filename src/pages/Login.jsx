@@ -6,6 +6,8 @@ import {
   CalendarDays,
   Wallet,
   BarChart3,
+  X,
+  AlertCircle,
 } from "lucide-react";
 import api from "../api/axios";
 
@@ -14,10 +16,12 @@ function Login() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [errorPopup, setErrorPopup] = useState(null);
 
   const login = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setErrorPopup(null);
 
     try {
       const res = await api.post("/login", {
@@ -28,7 +32,11 @@ function Login() {
       localStorage.setItem("user", JSON.stringify(res.data.user));
       window.location.href = "/dashboard";
     } catch (err) {
-      alert("Email atau password salah");
+      setErrorPopup({
+        title: "Login Failed",
+        message: "Invalid email or password. Please check your credentials and try again.",
+      });
+
       setLoading(false);
     }
   };
@@ -41,6 +49,45 @@ function Login() {
           "radial-gradient(circle at top left, #7F9DB1 0%, transparent 35%), linear-gradient(135deg, #0D3B66 0%, #1D567D 45%, #EAF1F5 100%)",
       }}
     >
+      {errorPopup && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-6 bg-black/30 backdrop-blur-sm">
+          <div className="w-full max-w-md bg-white rounded-[28px] shadow-2xl border border-white/70 overflow-hidden animate-[fadeIn_0.2s_ease-out]">
+            <div className="bg-gradient-to-r from-red-500 to-rose-600 px-6 py-5 text-white flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-2xl bg-white/20 flex items-center justify-center">
+                  <AlertCircle size={24} />
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-bold">{errorPopup.title}</h3>
+                  <p className="text-sm text-white/80">Authentication error</p>
+                </div>
+              </div>
+
+              <button
+                onClick={() => setErrorPopup(null)}
+                className="w-9 h-9 rounded-xl bg-white/15 hover:bg-white/25 flex items-center justify-center transition"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <div className="p-6">
+              <p className="text-gray-600 leading-relaxed">
+                {errorPopup.message}
+              </p>
+
+              <button
+                onClick={() => setErrorPopup(null)}
+                className="mt-6 w-full py-3 rounded-2xl bg-[#0D3B66] text-white font-bold hover:bg-[#092B4A] transition"
+              >
+                Try Again
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="absolute top-[-120px] left-[-120px] w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
       <div className="absolute bottom-[-160px] right-[-160px] w-[500px] h-[500px] bg-[#0D3B66]/20 rounded-full blur-3xl"></div>
       <div className="absolute top-20 right-24 w-32 h-32 border border-white/20 rounded-full animate-pulse"></div>
@@ -121,9 +168,7 @@ function Login() {
           </div>
 
           <div className="text-center mb-8">
-            <h2 className="text-4xl font-bold text-[#0D3B66]">
-              OmaSync
-            </h2>
+            <h2 className="text-4xl font-bold text-[#0D3B66]">OmaSync</h2>
             <p className="text-gray-500 mt-2">
               Sign in to your channel manager
             </p>
@@ -137,7 +182,7 @@ function Login() {
 
               <input
                 type="email"
-                placeholder="test@test.com"
+                placeholder="admin@omasync.com"
                 className="w-full px-4 py-4 rounded-2xl border border-gray-200 bg-white/80 focus:outline-none focus:ring-2 focus:ring-[#0D3B66] focus:border-transparent transition"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}

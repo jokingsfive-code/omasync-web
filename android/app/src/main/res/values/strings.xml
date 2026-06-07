@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">OmaSync</string>
+    <string name="title_activity_main">OmaSync</string>
+    <string name="package_name">com.omasync.app</string>
+    <string name="custom_url_scheme">com.omasync.app</string>
+</resources>
