@@ -226,20 +226,20 @@ export default function Dashboard() {
       <Sidebar />
 
       <div
-        className="flex-1 p-8 min-h-screen"
+        className="flex-1 p-4 pt-20 md:p-8 md:pt-8 min-h-screen"
         style={{
           background:
             "radial-gradient(circle at top left, rgba(127,157,177,0.35), transparent 35%), radial-gradient(circle at bottom right, rgba(13,59,102,0.15), transparent 35%), linear-gradient(135deg, #F3F6F8 0%, #E8EEF2 45%, #DCE7ED 100%)",
         }}
       >
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-[#0D3B66]">Dashboard</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-[#0D3B66]">Dashboard</h1>
           <p className="text-gray-500 mt-2">
             Smart channel manager overview for bookings, guests and revenue.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6">
           {kpiCards.map((card) => {
             const Icon = card.icon;
 
@@ -252,7 +252,7 @@ export default function Dashboard() {
                 <div className="flex justify-between items-start">
                   <div>
                     <p className="text-white/80 font-medium">{card.title}</p>
-                    <h2 className="text-4xl font-bold mt-3">{card.value}</h2>
+                    <h2 className="text-3xl md:text-4xl font-bold mt-3">{card.value}</h2>
                     <p className="text-sm text-white/70 mt-2">
                       {card.subtitle}
                     </p>
@@ -268,7 +268,7 @@ export default function Dashboard() {
         </div>
 
         <div className="mt-8 rounded-[32px] shadow-2xl p-7 border border-white/70 bg-white/90 backdrop-blur-xl">
-          <div className="flex justify-between items-start mb-7">
+          <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-7">
             <div>
               <h2 className="text-2xl font-bold text-[#0D3B66]">
                 Operations Summary
@@ -286,7 +286,7 @@ export default function Dashboard() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 md:gap-5">
             {operationCards.map((card) => {
               const Icon = card.icon;
 
