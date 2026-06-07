@@ -1,7 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
 
 export default function Sidebar() {
   const location = useLocation();
+  const [showSettings, setShowSettings] = useState(false);
 
   const logout = () => {
     localStorage.removeItem("user");
@@ -64,25 +66,25 @@ export default function Sidebar() {
           Expenses
         </Link>
 
-        <Link to="/settings" className={menuClass("/settings")}>
-          Settings
-        </Link>
+        <button
+          onClick={() => setShowSettings(!showSettings)}
+          className="w-full text-left px-4 py-3 rounded-xl text-gray-300 hover:bg-gray-800 hover:text-white transition flex justify-between items-center"
+        >
+          <span>Settings</span>
+          <span className="text-xs">{showSettings ? "▲" : "▼"}</span>
+        </button>
 
-        <div className="group">
-  <Link to="/settings" className={menuClass("/settings")}>
-    Settings
-  </Link>
+        {showSettings && (
+          <div className="ml-4 flex flex-col gap-2">
+            <Link to="/settings" className={menuClass("/settings")}>
+              General
+            </Link>
 
-  <div className="hidden group-hover:flex flex-col ml-4 mt-2 gap-2">
-    <Link to="/settings" className={menuClass("/settings")}>
-      General Settings
-    </Link>
-
-    <Link to="/users" className={menuClass("/users")}>
-      Users
-    </Link>
-  </div>
-</div>
+            <Link to="/users" className={menuClass("/users")}>
+              Users
+            </Link>
+          </div>
+        )}
 
         <hr className="my-4 border-gray-700" />
 
