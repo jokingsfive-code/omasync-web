@@ -1,302 +1,332 @@
+import { useEffect, useMemo, useState } from "react";
 import Sidebar from "../components/Sidebar";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import {
+  CalendarDays,
+  ChevronLeft,
+  ChevronRight,
+  Home,
+  Loader2,
+} from "lucide-react";
 
-const CHANNEL_COLORS = {
-  Airbnb: "#FF385C",
-  Agoda: "#FDB812",
-  "Booking.com": "#003B95",
-  Direct: "#16A34A",
+const channelColors = {
+  Airbnb: "bg-rose-500 text-white border-rose-600",
+  Booking: "bg-blue-600 text-white border-blue-700",
+  Agoda: "bg-purple-600 text-white border-purple-700",
+  Direct: "bg-emerald-600 text-white border-emerald-700",
+  Website: "bg-amber-500 text-white border-amber-600",
+  Other: "bg-gray-600 text-white border-gray-700",
 };
 
 export default function Calendar() {
-  const navigate = useNavigate();
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
   const [reservations, setReservations] = useState([]);
   const [properties, setProperties] = useState([]);
-  const [selectedYear, setSelectedYear] = useState(2026);
-  const [selectedMonth, setSelectedMonth] = useState(today.getMonth());
-
-  const monthNames = [
-    "January", "February", "March", "April",
-    "May", "June", "July", "August",
-    "September", "October", "November", "December",
-  ];
-
-  const years = [];
-  for (let year = 2026; year <= 2040; year++) years.push(year);
+  const [loading, setLoading] = useState(true);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   useEffect(() => {
-    fetchReservations();
-    fetchProperties();
+    fetchData();
   }, []);
 
-  const fetchReservations = async () => {
-    const res = await api.get("/reservations");
-    setReservations(res.data);
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+
+      const [reservationRes, propertyRes] = await Promise.all([
+        api.get("/reservations"),
+        api.get("/properties"),
+      ]);
+
+      setReservations(reservationRes.data || []);
+      setProperties(propertyRes.data || []);
+    } catch (error) {
+      console.error("Calendar fetch error:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const fetchProperties = async () => {
-    const res = await api.get("/properties");
-    setProperties(res.data);
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+
+  const monthName = currentDate.toLocaleString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const firstDay = new Date(year, month, 1).getDay();
+
+  const calendarDays = useMemo(() => {
+    const days = [];
+
+    for (let i = 0; i < firstDay; i++) {
+      days.push(null);
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      days.push(new Date(year, month, day));
+    }
+
+    return days;
+  }, [year, month, firstDay, daysInMonth]);
+
+  const goPrevMonth = () => {
+    setCurrentDate(new Date(year, month - 1, 1));
   };
 
-  const formatDateForUrl = (day) => {
-    const month = String(selectedMonth + 1).padStart(2, "0");
-    const date = String(day).padStart(2, "0");
-    return `${selectedYear}-${month}-${date}`;
+  const goNextMonth = () => {
+    setCurrentDate(new Date(year, month + 1, 1));
+  };
+
+  const goToday = () => {
+    setCurrentDate(new Date());
+  };
+
+  const formatDate = (date) => {
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+
+    return `${y}-${m}-${d}`;
   };
 
   const getPropertyName = (propertyId) => {
-    const property = properties.find((p) => Number(p.id) === Number(propertyId));
-    return property ? property.name : "-";
+    const property = properties.find(
+      (p) => String(p.id) === String(propertyId)
+    );
+
+    return property?.name || property?.property_name || "Property";
   };
 
-  const daysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
-  const firstDay = new Date(selectedYear, selectedMonth, 1).getDay();
+  const getBookingsForDate = (date) => {
+    if (!date) return [];
 
-  const calendarDays = [];
+    const dateStr = formatDate(date);
 
-  for (let i = 0; i < firstDay; i++) calendarDays.push(null);
-  for (let day = 1; day <= daysInMonth; day++) calendarDays.push(day);
+    return reservations.filter((booking) => {
+      const checkIn =
+        booking.check_in ||
+        booking.checkin_date ||
+        booking.start_date ||
+        booking.arrival_date;
 
-  const getReservationsForDay = (day) => {
-    const currentDate = new Date(selectedYear, selectedMonth, day);
-    currentDate.setHours(0, 0, 0, 0);
+      const checkOut =
+        booking.check_out ||
+        booking.checkout_date ||
+        booking.end_date ||
+        booking.departure_date;
 
-    return reservations.filter((reservation) => {
-      if (reservation.status === "Cancelled") return false;
+      if (!checkIn || !checkOut) return false;
 
-      const checkIn = new Date(reservation.check_in);
-      const checkOut = new Date(reservation.check_out);
-
-      checkIn.setHours(0, 0, 0, 0);
-      checkOut.setHours(0, 0, 0, 0);
-
-      return currentDate >= checkIn && currentDate < checkOut;
+      return dateStr >= checkIn && dateStr < checkOut;
     });
   };
 
-  const isPastDate = (day) => {
-    const currentDate = new Date(selectedYear, selectedMonth, day);
-    currentDate.setHours(0, 0, 0, 0);
-    return currentDate < today;
+  const isToday = (date) => {
+    if (!date) return false;
+
+    const today = new Date();
+
+    return (
+      date.getDate() === today.getDate() &&
+      date.getMonth() === today.getMonth() &&
+      date.getFullYear() === today.getFullYear()
+    );
   };
 
-  const getTextColor = (channel) => {
-    return channel === "Agoda" ? "#111827" : "#ffffff";
+  const getBookingName = (booking) => {
+    return (
+      booking.guest_name ||
+      booking.name ||
+      booking.customer_name ||
+      booking.guest ||
+      "Guest"
+    );
   };
 
-  const openReservationForm = (day, past) => {
-    if (!day || past) return;
-    navigate(`/reservations?date=${formatDateForUrl(day)}`);
+  const getBookingChannel = (booking) => {
+    return booking.channel || booking.source || booking.platform || "Other";
   };
 
   return (
-    <div className="flex">
+    <div className="min-h-screen bg-[#f7f8fb]">
       <Sidebar />
 
-      <div
-        className="flex-1 p-4 pt-20 md:p-8 md:pt-8 min-h-screen"
-        style={{
-          background:
-            "radial-gradient(circle at top left, rgba(127,157,177,0.35), transparent 35%), radial-gradient(circle at bottom right, rgba(13,59,102,0.14), transparent 35%), linear-gradient(135deg, #F3F6F8 0%, #E8EEF2 45%, #DCE7ED 100%)",
-        }}
-      >
-        <div className="flex flex-col xl:flex-row xl:justify-between xl:items-center gap-5 mb-6 md:mb-8">
-          <div>
-            <h1 className="text-3xl md:text-5xl font-bold text-[#0D3B66]">
-              {monthNames[selectedMonth]} {selectedYear}
-            </h1>
+      <main className="lg:ml-64 min-h-screen px-2 sm:px-6 lg:px-8 py-4 lg:py-8">
+        <div className="max-w-[1600px] mx-auto">
+          <div className="mb-4 sm:mb-6">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-black text-white flex items-center justify-center shadow-sm">
+                <CalendarDays size={21} />
+              </div>
 
-            <p className="text-gray-500 mt-2 text-sm md:text-base">
-              Swipe calendar on phone. Tap any future date to create a reservation.
-            </p>
+              <div>
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                  Calendar
+                </h1>
+                <p className="text-xs sm:text-sm text-gray-500">
+                  Airbnb style booking calendar.
+                </p>
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full xl:w-auto">
-            <select
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(Number(e.target.value))}
-              className="w-full px-5 py-3 rounded-2xl border border-gray-300 bg-white shadow"
-            >
-              {monthNames.map((month, index) => (
-                <option key={month} value={index}>
-                  {month}
-                </option>
-              ))}
-            </select>
+          <div className="bg-white rounded-[22px] sm:rounded-[28px] border border-gray-100 shadow-sm overflow-hidden">
+            <div className="px-3 sm:px-6 py-4 border-b border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <div>
+                <h2 className="text-lg sm:text-2xl font-bold text-gray-900">
+                  {monthName}
+                </h2>
+                <p className="text-[11px] sm:text-sm text-gray-500">
+                  Booking color follows channel.
+                </p>
+              </div>
 
-            <select
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(Number(e.target.value))}
-              className="w-full px-5 py-3 rounded-2xl border border-gray-300 bg-white shadow"
-            >
-              {years.map((year) => (
-                <option key={year} value={year}>
-                  {year}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={goPrevMonth}
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 active:scale-95 transition"
+                >
+                  <ChevronLeft size={18} />
+                </button>
 
-        <div className="mb-4 flex flex-wrap gap-2">
-          {Object.entries(CHANNEL_COLORS).map(([channel, color]) => (
-            <div
-              key={channel}
-              className="px-3 py-1.5 rounded-full text-xs font-bold shadow-sm"
-              style={{
-                backgroundColor: color,
-                color: getTextColor(channel),
-              }}
-            >
-              {channel}
-            </div>
-          ))}
-        </div>
+                <button
+                  onClick={goToday}
+                  className="h-9 sm:h-10 px-4 rounded-full bg-black text-white text-xs sm:text-sm font-semibold hover:bg-gray-800 active:scale-95 transition"
+                >
+                  Today
+                </button>
 
-        <div className="overflow-x-auto pb-4">
-          <div className="min-w-[760px] md:min-w-0">
-            <div className="grid grid-cols-7 gap-2 md:gap-3 mb-3 text-center text-gray-600 font-bold text-xs md:text-sm">
-              <div>Sun</div>
-              <div>Mon</div>
-              <div>Tue</div>
-              <div>Wed</div>
-              <div>Thu</div>
-              <div>Fri</div>
-              <div>Sat</div>
+                <button
+                  onClick={goNextMonth}
+                  className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 active:scale-95 transition"
+                >
+                  <ChevronRight size={18} />
+                </button>
+              </div>
             </div>
 
-            <div className="grid grid-cols-7 gap-2 md:gap-3">
-              {calendarDays.map((day, index) => {
-                const dayReservations = day ? getReservationsForDay(day) : [];
-                const past = day ? isPastDate(day) : false;
-
-                return (
+            <div className="px-3 sm:px-6 py-3 border-b border-gray-100">
+              <div className="flex items-center gap-3 overflow-x-auto pb-1">
+                {Object.keys(channelColors).map((channel) => (
                   <div
-                    key={index}
-                    onClick={() => openReservationForm(day, past)}
-                    className={`
-                      min-h-[105px] md:min-h-[145px] lg:min-h-[175px]
-                      rounded-2xl md:rounded-3xl
-                      border shadow-md overflow-hidden transition
-                      ${
-                        past
-                          ? "bg-gray-200 border-gray-300 opacity-70 cursor-not-allowed"
-                          : day
-                          ? "bg-white/90 border-white cursor-pointer hover:shadow-2xl hover:scale-[1.01] hover:ring-2 hover:ring-[#0D3B66]/20"
-                          : "bg-transparent border-transparent shadow-none"
-                      }
-                    `}
+                    key={channel}
+                    className="flex items-center gap-1.5 shrink-0 text-[10px] sm:text-sm text-gray-600"
                   >
-                    {day && (
-                      <>
-                        {dayReservations.length === 0 ? (
-                          <div className="h-full p-3 md:p-4 flex flex-col justify-between">
-                            <div>
-                              <div
-                                className={`font-black text-base md:text-xl ${
-                                  past
-                                    ? "text-gray-500 line-through"
-                                    : "text-gray-900"
-                                }`}
-                              >
-                                {day}
-                              </div>
+                    <span
+                      className={`w-2.5 h-2.5 rounded-full ${
+                        channelColors[channel].split(" ")[0]
+                      }`}
+                    />
+                    {channel}
+                  </div>
+                ))}
+              </div>
+            </div>
 
-                              <p
-                                className={`text-xs md:text-sm mt-4 md:mt-6 font-semibold ${
-                                  past ? "text-gray-400" : "text-[#0D3B66]"
-                                }`}
-                              >
-                                {past ? "Past" : "Available"}
-                              </p>
-                            </div>
-
-                            {!past && (
-                              <div className="text-[10px] md:text-xs text-green-700 bg-green-100 rounded-full px-2 py-1 w-fit font-bold">
-                                Open
-                              </div>
-                            )}
-                          </div>
-                        ) : (
-                          <div
-                            className="h-full grid"
-                            style={{
-                              gridTemplateRows: `repeat(${Math.min(
-                                dayReservations.length,
-                                3
-                              )}, minmax(0, 1fr))`,
-                            }}
-                          >
-                            {dayReservations.slice(0, 3).map((reservation, reservationIndex) => {
-                              const bgColor =
-                                CHANNEL_COLORS[reservation.channel] || "#6B7280";
-                              const textColor = getTextColor(reservation.channel);
-
-                              return (
-                                <div
-                                  key={reservation.id}
-                                  className="p-2 md:p-3 flex flex-col justify-center"
-                                  style={{
-                                    backgroundColor: past ? "#CBD5E1" : bgColor,
-                                    color: past ? "#475569" : textColor,
-                                    borderTop:
-                                      reservationIndex === 0
-                                        ? "none"
-                                        : "1px solid rgba(255,255,255,0.35)",
-                                  }}
-                                >
-                                  {reservationIndex === 0 && (
-                                    <div
-                                      className={`font-black text-base md:text-xl mb-1 ${
-                                        past ? "line-through" : ""
-                                      }`}
-                                    >
-                                      {day}
-                                    </div>
-                                  )}
-
-                                  <div className="text-[10px] md:text-xs font-black leading-tight line-clamp-1">
-                                    {reservation.guest_name}
-                                  </div>
-
-                                  <div className="text-[10px] md:text-xs font-bold mt-1 opacity-90 line-clamp-1">
-                                    {reservation.channel}
-                                  </div>
-
-                                  <div className="hidden lg:block text-xs font-semibold mt-1 opacity-90 line-clamp-1">
-                                    {getPropertyName(reservation.property_id)}
-                                  </div>
-                                </div>
-                              );
-                            })}
-
-                            {dayReservations.length > 3 && (
-                              <div className="bg-slate-900 text-white text-xs font-bold flex items-center justify-center">
-                                +{dayReservations.length - 3} more
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </>
+            {loading ? (
+              <div className="h-[360px] flex flex-col items-center justify-center text-gray-500">
+                <Loader2 className="animate-spin mb-3" size={30} />
+                <p className="text-sm">Loading calendar...</p>
+              </div>
+            ) : (
+              <div className="w-full">
+                <div className="w-full">
+                  <div className="grid grid-cols-7 bg-gray-50 border-b border-gray-100">
+                    {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
+                      (day) => (
+                        <div
+                          key={day}
+                          className="h-8 sm:h-11 flex items-center justify-center text-[9px] sm:text-sm font-bold text-gray-500 uppercase tracking-wide"
+                        >
+                          {day}
+                        </div>
+                      )
                     )}
                   </div>
-                );
-              })}
-            </div>
+
+                  <div className="grid grid-cols-7">
+                    {calendarDays.map((date, index) => {
+                      const bookings = getBookingsForDate(date);
+
+                      return (
+                        <div
+                          key={index}
+                          className={`min-h-[72px] sm:min-h-[145px] border-r border-b border-gray-100 p-1 sm:p-3 bg-white hover:bg-gray-50 transition ${
+                            !date ? "bg-gray-50/70" : ""
+                          }`}
+                        >
+                          {date && (
+                            <>
+                              <div className="flex items-center justify-between mb-1 sm:mb-2">
+                                <div
+                                  className={`w-5 h-5 sm:w-7 sm:h-7 flex items-center justify-center rounded-full text-[10px] sm:text-sm font-bold ${
+                                    isToday(date)
+                                      ? "bg-black text-white"
+                                      : "text-gray-800"
+                                  }`}
+                                >
+                                  {date.getDate()}
+                                </div>
+
+                                {bookings.length > 0 && (
+                                  <span className="text-[8px] sm:text-[10px] font-bold text-gray-400">
+                                    {bookings.length}
+                                  </span>
+                                )}
+                              </div>
+
+                              <div className="space-y-1 sm:space-y-1.5">
+                                {bookings.slice(0, 2).map((booking) => {
+                                  const channel = getBookingChannel(booking);
+                                  const color =
+                                    channelColors[channel] ||
+                                    channelColors.Other;
+
+                                  return (
+                                    <div
+                                      key={booking.id}
+                                      className={`rounded-lg sm:rounded-xl px-1 sm:px-2 py-1 sm:py-1.5 text-[8px] sm:text-[11px] leading-tight border shadow-sm ${color}`}
+                                    >
+                                      <div className="font-bold truncate">
+                                        {getBookingName(booking)}
+                                      </div>
+
+                                      <div className="hidden sm:flex items-center gap-1 opacity-90 truncate">
+                                        <Home size={10} />
+                                        <span className="truncate">
+                                          {getPropertyName(
+                                            booking.property_id
+                                          )}
+                                        </span>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+
+                                {bookings.length > 2 && (
+                                  <div className="text-[8px] sm:text-[11px] font-semibold text-gray-500 px-0.5 sm:px-1">
+                                    +{bookings.length - 2}
+                                  </div>
+                                )}
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="mt-3 sm:hidden text-center text-[11px] text-gray-400">
+            Compact Airbnb style calendar for mobile.
           </div>
         </div>
-
-        <p className="md:hidden text-xs text-gray-500 mt-2">
-          Tip: Swipe left/right to view the full calendar.
-        </p>
-      </div>
+      </main>
     </div>
   );
 }
