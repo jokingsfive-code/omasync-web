@@ -73,6 +73,7 @@ export default function Calendar() {
     const days = [];
 
     for (let i = 0; i < firstDay; i++) days.push(null);
+
     for (let day = 1; day <= daysInMonth; day++) {
       days.push(new Date(year, month, day));
     }
@@ -152,8 +153,16 @@ export default function Calendar() {
   };
 
   const getChannelStyle = (booking) => {
-    const key = String(getBookingChannel(booking)).toLowerCase();
-    return channelColors[key] || channelColors.other;
+    const channel = String(getBookingChannel(booking)).toLowerCase().trim();
+
+    if (channel.includes("booking")) return channelColors.booking;
+    if (channel.includes("airbnb")) return channelColors.airbnb;
+    if (channel.includes("agoda")) return channelColors.agoda;
+    if (channel.includes("direct")) return channelColors.direct;
+    if (channel.includes("website")) return channelColors.website;
+    if (channel.includes("web")) return channelColors.website;
+
+    return channelColors.other;
   };
 
   const getBookingsForDate = (date) => {
@@ -334,7 +343,13 @@ export default function Calendar() {
                               </div>
 
                               {hasBooking && (
-                                <span className="text-[9px] sm:text-xs font-black text-white">
+                                <span
+                                  className={`text-[9px] sm:text-xs font-black ${
+                                    hasBooking && !past
+                                      ? "text-white"
+                                      : "text-gray-400"
+                                  }`}
+                                >
                                   {bookings.length}
                                 </span>
                               )}
@@ -405,6 +420,55 @@ export default function Calendar() {
                   <X size={18} />
                 </button>
               </div>
+
+              {selectedBookings.length === 0 ? (
+                <div className="rounded-2xl bg-gray-50 border border-gray-100 p-4 text-sm text-gray-500">
+                  No booking on this date.
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {selectedBookings.map((booking) => (
+                    <div
+                      key={booking.id}
+                      className="rounded-2xl border border-gray-100 p-4 flex items-start justify-between gap-3"
+                    >
+                      <div>
+                        <div className="font-black text-gray-950">
+                          {getBookingName(booking)}
+                        </div>
+
+                        <div className="text-sm text-gray-500 mt-1">
+                          {getPropertyName(booking.property_id)}
+                        </div>
+
+                        <div className="text-xs text-gray-400 mt-1">
+                          {cleanDate(
+                            booking.check_in ||
+                              booking.checkin_date ||
+                              booking.start_date ||
+                              booking.arrival_date
+                          )}{" "}
+                          →{" "}
+                          {cleanDate(
+                            booking.check_out ||
+                              booking.checkout_date ||
+                              booking.end_date ||
+                              booking.departure_date
+                          )}
+                        </div>
+                      </div>
+
+                      <span
+                        className={`shrink-0 rounded-full px-3 py-1 text-xs font-black border ${
+                          getChannelStyle(booking).main
+                        }`}
+                      >
+                        {getBookingChannel(booking)}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
