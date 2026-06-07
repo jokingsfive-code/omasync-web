@@ -12,27 +12,33 @@ import {
 
 const channelColors = {
   airbnb: {
-    box: "bg-rose-500 border-rose-600 text-white",
+    main: "bg-rose-500 border-rose-600 text-white",
+    soft: "bg-rose-100 text-rose-700 border-rose-200",
     dot: "bg-rose-500",
   },
   booking: {
-    box: "bg-blue-600 border-blue-700 text-white",
+    main: "bg-blue-600 border-blue-700 text-white",
+    soft: "bg-blue-100 text-blue-700 border-blue-200",
     dot: "bg-blue-600",
   },
   agoda: {
-    box: "bg-purple-600 border-purple-700 text-white",
+    main: "bg-purple-600 border-purple-700 text-white",
+    soft: "bg-purple-100 text-purple-700 border-purple-200",
     dot: "bg-purple-600",
   },
   direct: {
-    box: "bg-emerald-600 border-emerald-700 text-white",
+    main: "bg-emerald-600 border-emerald-700 text-white",
+    soft: "bg-emerald-100 text-emerald-700 border-emerald-200",
     dot: "bg-emerald-600",
   },
   website: {
-    box: "bg-amber-500 border-amber-600 text-white",
+    main: "bg-amber-500 border-amber-600 text-white",
+    soft: "bg-amber-100 text-amber-700 border-amber-200",
     dot: "bg-amber-500",
   },
   other: {
-    box: "bg-slate-600 border-slate-700 text-white",
+    main: "bg-slate-600 border-slate-700 text-white",
+    soft: "bg-slate-100 text-slate-700 border-slate-200",
     dot: "bg-slate-600",
   },
 };
@@ -118,8 +124,10 @@ export default function Calendar() {
 
   const isPastDate = (date) => {
     if (!date) return false;
+
     const d = new Date(date);
     d.setHours(0, 0, 0, 0);
+
     return d < todayOnly;
   };
 
@@ -158,7 +166,7 @@ export default function Calendar() {
       booking.name ||
       booking.customer_name ||
       booking.guest ||
-      "Guest"
+      "(Not available)"
     );
   };
 
@@ -176,7 +184,7 @@ export default function Calendar() {
     return String(getBookingChannel(booking)).toLowerCase();
   };
 
-  const getChannelColor = (booking) => {
+  const getChannelStyle = (booking) => {
     return channelColors[getChannelKey(booking)] || channelColors.other;
   };
 
@@ -209,11 +217,11 @@ export default function Calendar() {
   const selectedBookings = selectedDate ? getBookingsForDate(selectedDate) : [];
 
   return (
-    <div className="min-h-screen bg-[#f7f8fb]">
+    <div className="min-h-screen bg-[#f7f8fb] overflow-x-hidden">
       <Sidebar />
 
-      <main className="min-h-screen lg:ml-64 px-3 sm:px-6 lg:px-8 py-5 lg:py-8">
-        <div className="max-w-[1600px] mx-auto">
+      <main className="min-h-screen lg:ml-64 px-3 sm:px-6 lg:px-8 py-5 lg:py-8 overflow-x-hidden">
+        <div className="w-full max-w-[1600px] mx-auto">
           <div className="mb-5 sm:mb-6 pl-20 sm:pl-0">
             <div className="flex items-center gap-4">
               <div className="hidden sm:flex w-11 h-11 rounded-2xl bg-black text-white items-center justify-center shadow-sm">
@@ -231,14 +239,14 @@ export default function Calendar() {
             </div>
           </div>
 
-          <div className="bg-white rounded-[26px] sm:rounded-[30px] border border-gray-100 shadow-sm overflow-hidden">
+          <div className="w-full bg-white rounded-[26px] sm:rounded-[30px] border border-gray-100 shadow-sm overflow-hidden">
             <div className="px-4 sm:px-6 py-5 border-b border-gray-100 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
               <div>
                 <h2 className="text-2xl sm:text-3xl font-black text-gray-950">
                   {monthName}
                 </h2>
                 <p className="text-sm text-gray-500">
-                  Tap available date to view booking details.
+                  Tap future date to view booking details.
                 </p>
               </div>
 
@@ -316,8 +324,8 @@ export default function Calendar() {
                       date &&
                       formatDate(selectedDate) === formatDate(date);
 
-                    const mainColor = hasBooking
-                      ? getChannelColor(bookings[0])
+                    const mainStyle = hasBooking
+                      ? getChannelStyle(bookings[0])
                       : null;
 
                     return (
@@ -325,16 +333,18 @@ export default function Calendar() {
                         key={index}
                         type="button"
                         disabled={!date || past}
-                        onClick={() => date && !past && setSelectedDate(date)}
+                        onClick={() => {
+                          if (date && !past) setSelectedDate(date);
+                        }}
                         className={`min-h-[78px] sm:min-h-[150px] rounded-2xl sm:rounded-3xl p-1.5 sm:p-3 text-left transition border relative overflow-hidden ${
                           !date
                             ? "bg-transparent border-transparent"
                             : past
                             ? "bg-gray-50 border-gray-100 opacity-35 cursor-not-allowed"
                             : active
-                            ? "bg-gray-950 border-gray-950 shadow-lg scale-[1.01]"
+                            ? "bg-gray-950 border-gray-950 shadow-lg"
                             : hasBooking
-                            ? `${mainColor.box} shadow-md hover:shadow-lg active:scale-[0.98]`
+                            ? `${mainStyle.main} shadow-md hover:shadow-lg active:scale-[0.98]`
                             : "bg-white border-gray-100 hover:border-gray-300 hover:shadow-sm active:scale-[0.98]"
                         }`}
                       >
@@ -384,6 +394,10 @@ export default function Calendar() {
                                       <span className="truncate">
                                         {getPropertyName(booking.property_id)}
                                       </span>
+                                    </div>
+
+                                    <div className="hidden sm:block text-[10px] opacity-90 truncate">
+                                      {getBookingChannel(booking)}
                                     </div>
                                   </div>
                                 ))}
@@ -469,7 +483,7 @@ export default function Calendar() {
 
                       <span
                         className={`shrink-0 rounded-full px-3 py-1 text-xs font-black border ${
-                          getChannelColor(booking).box
+                          getChannelStyle(booking).main
                         }`}
                       >
                         {getBookingChannel(booking)}
