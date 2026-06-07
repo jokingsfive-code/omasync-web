@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import api from "../api/axios";
 
+const API_URL = "https://web-production-2db875.up.railway.app";
+
 const CHANNEL_COLORS = {
   Airbnb: "#FF5A5F",
   Agoda: "#FDB812",
@@ -19,18 +21,8 @@ const CHANNEL_COLORS = {
 };
 
 const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  "January","February","March","April","May","June",
+  "July","August","September","October","November","December",
 ];
 
 export default function Finance() {
@@ -39,7 +31,6 @@ export default function Finance() {
   const [expenses, setExpenses] = useState([]);
 
   const today = new Date();
-
   const [selectedMonth, setSelectedMonth] = useState(today.getMonth());
   const [selectedYear, setSelectedYear] = useState(today.getFullYear());
   const [selectedProperty, setSelectedProperty] = useState("all");
@@ -78,29 +69,22 @@ export default function Finance() {
   };
 
   const generateMonthlyReport = () => {
-  const month = Number(selectedMonth) + 1;
-
-  const url = `https://web-production-2db875.up.railway.app/api/reports/monthly-pdf?month=${month}&year=${selectedYear}&property_id=${selectedProperty}`;
-
-  window.open(url, "_blank");
-};
+    const month = Number(selectedMonth) + 1;
+    const url = `${API_URL}/api/reports/monthly-pdf?month=${month}&year=${selectedYear}&property_id=${selectedProperty}`;
+    window.open(url, "_blank");
+  };
 
   const generateInvoice = (reservationId) => {
-  const url = `https://web-production-2db875.up.railway.app/api/invoices/reservations/${reservationId}/download`;
-
-  window.open(url, "_blank");
-};
+    const url = `${API_URL}/api/invoices/reservations/${reservationId}/download`;
+    window.open(url, "_blank");
+  };
 
   const yearOptions = [];
-  for (let year = 2024; year <= 2040; year++) {
-    yearOptions.push(year);
-  }
+  for (let year = 2024; year <= 2040; year++) yearOptions.push(year);
 
   const isSameMonthYear = (dateString) => {
     if (!dateString) return false;
-
     const date = new Date(dateString);
-
     return (
       date.getMonth() === Number(selectedMonth) &&
       date.getFullYear() === Number(selectedYear)
@@ -112,9 +96,7 @@ export default function Finance() {
     return Number(item.property_id) === Number(selectedProperty);
   };
 
-  const activeReservations = reservations.filter(
-    (r) => r.status !== "Cancelled"
-  );
+  const activeReservations = reservations.filter((r) => r.status !== "Cancelled");
 
   const filteredReservations = activeReservations.filter((reservation) => {
     return isSameMonthYear(reservation.check_in) && matchProperty(reservation);
@@ -148,12 +130,10 @@ export default function Finance() {
 
   const formatDate = (dateString) => {
     if (!dateString) return "-";
-
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
-
     return `${day}-${month}-${year}`;
   };
 
@@ -163,10 +143,7 @@ export default function Finance() {
         .filter((r) => r.channel === channel)
         .reduce((sum, r) => sum + Number(r.total_price || 0), 0);
 
-      return {
-        channel,
-        revenue,
-      };
+      return { channel, revenue };
     }
   );
 
@@ -183,10 +160,7 @@ export default function Finance() {
       .filter((e) => e.category === category)
       .reduce((sum, e) => sum + Number(e.amount || 0), 0);
 
-    return {
-      category,
-      total,
-    };
+    return { category, total };
   });
 
   const revenueByProperty = properties
@@ -244,25 +218,27 @@ export default function Finance() {
       <Sidebar />
 
       <div
-        className="flex-1 p-8 min-h-screen"
+        className="flex-1 p-4 pt-20 md:p-8 md:pt-8 min-h-screen"
         style={{
           background:
             "radial-gradient(circle at top left, rgba(127,157,177,0.35), transparent 35%), radial-gradient(circle at bottom right, rgba(13,59,102,0.14), transparent 35%), linear-gradient(135deg, #F3F6F8 0%, #E8EEF2 45%, #DCE7ED 100%)",
         }}
       >
-        <div className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-5 mb-8">
+        <div className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-5 mb-6 md:mb-8">
           <div>
-            <h1 className="text-4xl font-bold text-[#0D3B66]">Finance</h1>
-            <p className="text-gray-500 mt-2">
+            <h1 className="text-3xl md:text-4xl font-bold text-[#0D3B66]">
+              Finance
+            </h1>
+            <p className="text-gray-500 mt-2 text-sm md:text-base">
               Monthly revenue, expenses, reports and invoices by property.
             </p>
           </div>
 
-          <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl p-4 border border-white/70 flex flex-col md:flex-row gap-3">
+          <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-xl p-4 border border-white/70 grid grid-cols-1 sm:grid-cols-2 xl:flex gap-3">
             <select
               value={selectedMonth}
               onChange={(e) => setSelectedMonth(Number(e.target.value))}
-              className="px-5 py-3 rounded-2xl border border-gray-200 bg-white font-semibold"
+              className="w-full px-5 py-3 rounded-2xl border border-gray-200 bg-white font-semibold"
             >
               {MONTHS.map((month, index) => (
                 <option key={month} value={index}>
@@ -274,7 +250,7 @@ export default function Finance() {
             <select
               value={selectedYear}
               onChange={(e) => setSelectedYear(Number(e.target.value))}
-              className="px-5 py-3 rounded-2xl border border-gray-200 bg-white font-semibold"
+              className="w-full px-5 py-3 rounded-2xl border border-gray-200 bg-white font-semibold"
             >
               {yearOptions.map((year) => (
                 <option key={year} value={year}>
@@ -286,10 +262,9 @@ export default function Finance() {
             <select
               value={selectedProperty}
               onChange={(e) => setSelectedProperty(e.target.value)}
-              className="px-5 py-3 rounded-2xl border border-gray-200 bg-white font-semibold min-w-[220px]"
+              className="w-full sm:col-span-2 xl:col-span-1 px-5 py-3 rounded-2xl border border-gray-200 bg-white font-semibold xl:min-w-[220px]"
             >
               <option value="all">All Properties</option>
-
               {properties.map((property) => (
                 <option key={property.id} value={property.id}>
                   {property.name}
@@ -299,7 +274,7 @@ export default function Finance() {
 
             <button
               onClick={generateMonthlyReport}
-              className="px-6 py-3 rounded-2xl bg-[#0D3B66] text-white font-bold hover:bg-[#092B4A] transition flex items-center justify-center gap-2"
+              className="w-full sm:col-span-2 xl:col-span-1 px-6 py-3 rounded-2xl bg-[#0D3B66] text-white font-bold hover:bg-[#092B4A] transition flex items-center justify-center gap-2"
             >
               <FileDown size={18} />
               Monthly PDF
@@ -307,12 +282,12 @@ export default function Finance() {
           </div>
         </div>
 
-        <div className="mb-8 bg-gradient-to-r from-[#0D3B66] to-[#174B7A] text-white rounded-[32px] p-6 shadow-2xl flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5">
+        <div className="mb-6 md:mb-8 bg-gradient-to-r from-[#0D3B66] to-[#174B7A] text-white rounded-[28px] md:rounded-[32px] p-5 md:p-6 shadow-2xl flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5">
           <div>
             <p className="text-blue-100 text-sm font-semibold">
               Active Finance Period
             </p>
-            <h2 className="text-3xl font-bold mt-1">
+            <h2 className="text-2xl md:text-3xl font-bold mt-1">
               {MONTHS[selectedMonth].toUpperCase()} {selectedYear}
             </h2>
             <p className="text-blue-100 text-sm mt-2">
@@ -323,62 +298,66 @@ export default function Finance() {
 
           <button
             onClick={generateMonthlyReport}
-            className="bg-white text-[#0D3B66] px-6 py-3 rounded-2xl font-bold hover:scale-[1.03] transition flex items-center justify-center gap-2"
+            className="w-full xl:w-auto bg-white text-[#0D3B66] px-6 py-3 rounded-2xl font-bold hover:scale-[1.03] transition flex items-center justify-center gap-2"
           >
             <FileDown size={18} />
             Generate Monthly Report
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-8">
-          <div className="rounded-3xl p-6 text-white shadow-xl bg-gradient-to-br from-[#0D3B66] to-[#1B5E9E]">
-            <Wallet size={28} />
-            <p className="text-white/70 mt-5">Monthly Revenue</p>
-            <h2 className="text-3xl font-bold mt-2">
-              RM {monthlyRevenue.toLocaleString()}
-            </h2>
-          </div>
-
-          <div className="rounded-3xl p-6 text-white shadow-xl bg-gradient-to-br from-red-500 to-red-700">
-            <ReceiptText size={28} />
-            <p className="text-white/70 mt-5">Monthly Expenses</p>
-            <h2 className="text-3xl font-bold mt-2">
-              RM {monthlyExpenses.toLocaleString()}
-            </h2>
-          </div>
-
-          <div
-            className={`rounded-3xl p-6 text-white shadow-xl ${
-              netProfit >= 0
-                ? "bg-gradient-to-br from-green-500 to-emerald-700"
-                : "bg-gradient-to-br from-orange-500 to-red-600"
-            }`}
-          >
-            <TrendingUp size={28} />
-            <p className="text-white/70 mt-5">Net Profit</p>
-            <h2 className="text-3xl font-bold mt-2">
-              RM {netProfit.toLocaleString()}
-            </h2>
-          </div>
-
-          <div className="rounded-3xl p-6 text-white shadow-xl bg-gradient-to-br from-orange-500 to-red-600">
-            <CalendarCheck size={28} />
-            <p className="text-white/70 mt-5">Average Booking</p>
-            <h2 className="text-3xl font-bold mt-2">
-              RM {Math.round(averageBookingValue).toLocaleString()}
-            </h2>
-          </div>
-
-          <div className="rounded-3xl p-6 text-white shadow-xl bg-gradient-to-br from-slate-900 to-slate-700">
-            <Building2 size={28} />
-            <p className="text-white/70 mt-5">Paid Bookings</p>
-            <h2 className="text-3xl font-bold mt-2">
-              {filteredReservations.length}
-            </h2>
-          </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4 md:gap-6 mb-6 md:mb-8">
+          {[
+            {
+              icon: Wallet,
+              label: "Monthly Revenue",
+              value: `RM ${monthlyRevenue.toLocaleString()}`,
+              color: "from-[#0D3B66] to-[#1B5E9E]",
+            },
+            {
+              icon: ReceiptText,
+              label: "Monthly Expenses",
+              value: `RM ${monthlyExpenses.toLocaleString()}`,
+              color: "from-red-500 to-red-700",
+            },
+            {
+              icon: TrendingUp,
+              label: "Net Profit",
+              value: `RM ${netProfit.toLocaleString()}`,
+              color:
+                netProfit >= 0
+                  ? "from-green-500 to-emerald-700"
+                  : "from-orange-500 to-red-600",
+            },
+            {
+              icon: CalendarCheck,
+              label: "Average Booking",
+              value: `RM ${Math.round(averageBookingValue).toLocaleString()}`,
+              color: "from-orange-500 to-red-600",
+            },
+            {
+              icon: Building2,
+              label: "Paid Bookings",
+              value: filteredReservations.length,
+              color: "from-slate-900 to-slate-700",
+            },
+          ].map((card) => {
+            const Icon = card.icon;
+            return (
+              <div
+                key={card.label}
+                className={`rounded-3xl p-5 md:p-6 text-white shadow-xl bg-gradient-to-br ${card.color}`}
+              >
+                <Icon size={26} />
+                <p className="text-white/70 mt-5 text-sm">{card.label}</p>
+                <h2 className="text-2xl md:text-3xl font-bold mt-2">
+                  {card.value}
+                </h2>
+              </div>
+            );
+          })}
         </div>
 
-        <div className="bg-white/90 backdrop-blur-xl rounded-[32px] shadow-2xl p-7 border border-white/70 mb-8">
+        <div className="bg-white/90 backdrop-blur-xl rounded-[28px] md:rounded-[32px] shadow-2xl p-4 md:p-7 border border-white/70 mb-6 md:mb-8">
           <div className="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 mb-6">
             <div>
               <h2 className="text-2xl font-bold text-[#0D3B66]">
@@ -389,13 +368,13 @@ export default function Finance() {
               </p>
             </div>
 
-            <div className="px-5 py-3 rounded-2xl bg-[#0D3B66]/10 text-[#0D3B66] font-bold">
+            <div className="px-5 py-3 rounded-2xl bg-[#0D3B66]/10 text-[#0D3B66] font-bold text-center">
               {filteredReservations.length} invoice(s)
             </div>
           </div>
 
           {filteredReservations.length === 0 ? (
-            <div className="bg-gray-50 rounded-3xl p-12 text-center">
+            <div className="bg-gray-50 rounded-3xl p-10 md:p-12 text-center">
               <p className="text-gray-500">No invoices for selected period.</p>
             </div>
           ) : (
@@ -403,10 +382,10 @@ export default function Finance() {
               {filteredReservations.map((reservation) => (
                 <div
                   key={reservation.id}
-                  className="bg-white rounded-3xl p-5 shadow-md border border-gray-100 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5 hover:shadow-xl transition"
+                  className="bg-white rounded-3xl p-4 md:p-5 shadow-md border border-gray-100 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5 hover:shadow-xl transition"
                 >
-                  <div>
-                    <p className="font-bold text-lg text-gray-900">
+                  <div className="min-w-0">
+                    <p className="font-bold text-lg text-gray-900 truncate">
                       {reservation.guest_name}
                     </p>
                     <p className="text-sm text-gray-500">
@@ -416,7 +395,7 @@ export default function Finance() {
                     </p>
                   </div>
 
-                  <div className="flex flex-col md:flex-row md:items-center gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 xl:flex xl:items-center gap-3">
                     <span
                       className="inline-flex px-3 py-1.5 rounded-full text-xs font-bold justify-center"
                       style={{
@@ -431,7 +410,7 @@ export default function Finance() {
                       {reservation.channel}
                     </span>
 
-                    <p className="font-bold text-[#0D3B66] min-w-[110px] text-right">
+                    <p className="font-bold text-[#0D3B66] text-center xl:min-w-[110px] xl:text-right">
                       RM {Number(reservation.total_price || 0).toLocaleString()}
                     </p>
 
@@ -449,8 +428,8 @@ export default function Finance() {
           )}
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
-          <div className="bg-white/90 backdrop-blur-xl rounded-[32px] shadow-2xl p-7 border border-white/70">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8 mb-6 md:mb-8">
+          <div className="bg-white/90 backdrop-blur-xl rounded-[28px] md:rounded-[32px] shadow-2xl p-4 md:p-7 border border-white/70">
             <h2 className="text-2xl font-bold text-[#0D3B66] mb-2">
               Revenue by Channel
             </h2>
@@ -467,7 +446,7 @@ export default function Finance() {
 
                 return (
                   <div key={item.channel}>
-                    <div className="flex justify-between mb-2">
+                    <div className="flex justify-between gap-3 mb-2">
                       <div className="flex items-center gap-3">
                         <div
                           className="w-4 h-4 rounded-full"
@@ -502,7 +481,7 @@ export default function Finance() {
             </div>
           </div>
 
-          <div className="bg-white/90 backdrop-blur-xl rounded-[32px] shadow-2xl p-7 border border-white/70">
+          <div className="bg-white/90 backdrop-blur-xl rounded-[28px] md:rounded-[32px] shadow-2xl p-4 md:p-7 border border-white/70">
             <h2 className="text-2xl font-bold text-[#0D3B66] mb-2">
               Expenses by Category
             </h2>
@@ -519,11 +498,8 @@ export default function Finance() {
 
                 return (
                   <div key={item.category}>
-                    <div className="flex justify-between mb-2">
-                      <p className="font-bold text-gray-900">
-                        {item.category}
-                      </p>
-
+                    <div className="flex justify-between gap-3 mb-2">
+                      <p className="font-bold text-gray-900">{item.category}</p>
                       <p className="font-bold text-red-600">
                         RM {item.total.toLocaleString()}
                       </p>
@@ -542,7 +518,7 @@ export default function Finance() {
           </div>
         </div>
 
-        <div className="bg-white/90 backdrop-blur-xl rounded-[32px] shadow-2xl p-7 border border-white/70 mb-8">
+        <div className="bg-white/90 backdrop-blur-xl rounded-[28px] md:rounded-[32px] shadow-2xl p-4 md:p-7 border border-white/70 mb-6 md:mb-8">
           <h2 className="text-2xl font-bold text-[#0D3B66] mb-2">
             Property Profit Breakdown
           </h2>
@@ -565,9 +541,9 @@ export default function Finance() {
               return (
                 <div
                   key={property.id}
-                  className="bg-white rounded-3xl p-5 shadow-md border border-gray-100"
+                  className="bg-white rounded-3xl p-4 md:p-5 shadow-md border border-gray-100"
                 >
-                  <div className="flex justify-between mb-4">
+                  <div className="flex flex-col sm:flex-row sm:justify-between gap-3 mb-4">
                     <div>
                       <p className="font-bold text-lg text-gray-900">
                         {property.name}
@@ -577,7 +553,7 @@ export default function Finance() {
                       </p>
                     </div>
 
-                    <div className="text-right">
+                    <div className="sm:text-right">
                       <p
                         className={`font-bold text-xl ${
                           property.profit >= 0
@@ -634,8 +610,8 @@ export default function Finance() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-          <div className="bg-white/90 backdrop-blur-xl rounded-[32px] shadow-2xl p-7 border border-white/70">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8">
+          <div className="bg-white/90 backdrop-blur-xl rounded-[28px] md:rounded-[32px] shadow-2xl p-4 md:p-7 border border-white/70">
             <h2 className="text-2xl font-bold text-[#0D3B66]">
               Booking Revenue
             </h2>
@@ -644,7 +620,7 @@ export default function Finance() {
             </p>
 
             {recentRevenue.length === 0 ? (
-              <div className="bg-gray-50 rounded-3xl p-12 text-center">
+              <div className="bg-gray-50 rounded-3xl p-10 md:p-12 text-center">
                 <p className="text-gray-500">No revenue records.</p>
               </div>
             ) : (
@@ -652,9 +628,9 @@ export default function Finance() {
                 {recentRevenue.map((reservation) => (
                   <div
                     key={reservation.id}
-                    className="bg-white rounded-3xl p-5 shadow-md border border-gray-100"
+                    className="bg-white rounded-3xl p-4 md:p-5 shadow-md border border-gray-100"
                   >
-                    <div className="flex justify-between">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
                       <div>
                         <p className="font-bold text-gray-900">
                           {reservation.guest_name}
@@ -667,7 +643,7 @@ export default function Finance() {
                         </p>
                       </div>
 
-                      <div className="text-right">
+                      <div className="sm:text-right">
                         <span
                           className="inline-flex px-3 py-1.5 rounded-full text-xs font-bold mb-2"
                           style={{
@@ -696,7 +672,7 @@ export default function Finance() {
             )}
           </div>
 
-          <div className="bg-white/90 backdrop-blur-xl rounded-[32px] shadow-2xl p-7 border border-white/70">
+          <div className="bg-white/90 backdrop-blur-xl rounded-[28px] md:rounded-[32px] shadow-2xl p-4 md:p-7 border border-white/70">
             <h2 className="text-2xl font-bold text-[#0D3B66]">
               Expense Records
             </h2>
@@ -705,7 +681,7 @@ export default function Finance() {
             </p>
 
             {recentExpenses.length === 0 ? (
-              <div className="bg-gray-50 rounded-3xl p-12 text-center">
+              <div className="bg-gray-50 rounded-3xl p-10 md:p-12 text-center">
                 <p className="text-gray-500">No expense records.</p>
               </div>
             ) : (
@@ -713,9 +689,9 @@ export default function Finance() {
                 {recentExpenses.map((expense) => (
                   <div
                     key={expense.id}
-                    className="bg-white rounded-3xl p-5 shadow-md border border-gray-100"
+                    className="bg-white rounded-3xl p-4 md:p-5 shadow-md border border-gray-100"
                   >
-                    <div className="flex justify-between">
+                    <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
                       <div>
                         <p className="font-bold text-gray-900">
                           {expense.description}
@@ -728,7 +704,7 @@ export default function Finance() {
                         </p>
                       </div>
 
-                      <div className="text-right">
+                      <div className="sm:text-right">
                         <span className="inline-flex px-3 py-1.5 rounded-full bg-red-100 text-red-600 text-xs font-bold mb-2">
                           {expense.category}
                         </span>
