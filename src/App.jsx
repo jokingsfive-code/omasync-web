@@ -12,7 +12,9 @@ import Expenses from "./pages/Expenses";
 import Housekeeping from "./pages/Housekeeping";
 import Maintenance from "./pages/Maintenance";
 import Settings from "./pages/Settings";
+import Users from "./pages/Users";
 import FloatingDashboard from "./components/FloatingDashboard";
+
 
 function PrivateRoute({ children }) {
   const user = localStorage.getItem("user");
@@ -124,6 +126,15 @@ export default function App() {
             </PrivateRoute>
           }
         />
+
+        <Route
+  path="/users"
+  element={
+    <PrivateRoute>
+      <Users />
+    </PrivateRoute>
+  }
+/>
       </Routes>
 
       <FloatingDashboard />

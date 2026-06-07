@@ -68,6 +68,10 @@ export default function Sidebar() {
           Settings
         </Link>
 
+        <Link to="/users" className={menuClass("/users")}>
+          Users
+        </Link>
+
         <hr className="my-4 border-gray-700" />
 
         <button
