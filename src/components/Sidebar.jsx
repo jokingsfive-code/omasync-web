@@ -68,9 +68,21 @@ export default function Sidebar() {
           Settings
         </Link>
 
-        <Link to="/users" className={menuClass("/users")}>
-          Users
-        </Link>
+        <div className="group">
+  <Link to="/settings" className={menuClass("/settings")}>
+    Settings
+  </Link>
+
+  <div className="hidden group-hover:flex flex-col ml-4 mt-2 gap-2">
+    <Link to="/settings" className={menuClass("/settings")}>
+      General Settings
+    </Link>
+
+    <Link to="/users" className={menuClass("/users")}>
+      Users
+    </Link>
+  </div>
+</div>
 
         <hr className="my-4 border-gray-700" />
 
