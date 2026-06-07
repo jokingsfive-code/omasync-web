@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 
 const CHANNEL_COLORS = {
-  Airbnb: "#FF5A5F",
+  Airbnb: "#FF385C",
   Agoda: "#FDB812",
   "Booking.com": "#003B95",
   Direct: "#16A34A",
@@ -22,24 +22,13 @@ export default function Calendar() {
   const [selectedMonth, setSelectedMonth] = useState(today.getMonth());
 
   const monthNames = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
+    "January", "February", "March", "April",
+    "May", "June", "July", "August",
+    "September", "October", "November", "December",
   ];
 
   const years = [];
-  for (let year = 2026; year <= 2040; year++) {
-    years.push(year);
-  }
+  for (let year = 2026; year <= 2040; year++) years.push(year);
 
   useEffect(() => {
     fetchReservations();
@@ -62,14 +51,6 @@ export default function Calendar() {
     return `${selectedYear}-${month}-${date}`;
   };
 
-  const formatDate = (date) => {
-    const d = new Date(date);
-
-    return `${String(d.getDate()).padStart(2, "0")}-${String(
-      d.getMonth() + 1
-    ).padStart(2, "0")}-${d.getFullYear()}`;
-  };
-
   const getPropertyName = (propertyId) => {
     const property = properties.find((p) => Number(p.id) === Number(propertyId));
     return property ? property.name : "-";
@@ -80,13 +61,8 @@ export default function Calendar() {
 
   const calendarDays = [];
 
-  for (let i = 0; i < firstDay; i++) {
-    calendarDays.push(null);
-  }
-
-  for (let day = 1; day <= daysInMonth; day++) {
-    calendarDays.push(day);
-  }
+  for (let i = 0; i < firstDay; i++) calendarDays.push(null);
+  for (let day = 1; day <= daysInMonth; day++) calendarDays.push(day);
 
   const getReservationsForDay = (day) => {
     const currentDate = new Date(selectedYear, selectedMonth, day);
@@ -108,7 +84,6 @@ export default function Calendar() {
   const isPastDate = (day) => {
     const currentDate = new Date(selectedYear, selectedMonth, day);
     currentDate.setHours(0, 0, 0, 0);
-
     return currentDate < today;
   };
 
@@ -118,9 +93,7 @@ export default function Calendar() {
 
   const openReservationForm = (day, past) => {
     if (!day || past) return;
-
-    const dateUrl = formatDateForUrl(day);
-    navigate(`/reservations?date=${dateUrl}`);
+    navigate(`/reservations?date=${formatDateForUrl(day)}`);
   };
 
   return (
@@ -141,7 +114,7 @@ export default function Calendar() {
             </h1>
 
             <p className="text-gray-500 mt-2 text-sm md:text-base">
-              Click any future date to create a new reservation.
+              Swipe calendar on phone. Tap any future date to create a reservation.
             </p>
           </div>
 
@@ -172,235 +145,157 @@ export default function Calendar() {
           </div>
         </div>
 
-        <div className="hidden md:grid grid-cols-7 gap-3 mb-4 text-center text-gray-600 font-semibold">
-          <div>Sun</div>
-          <div>Mon</div>
-          <div>Tue</div>
-          <div>Wed</div>
-          <div>Thu</div>
-          <div>Fri</div>
-          <div>Sat</div>
+        <div className="mb-4 flex flex-wrap gap-2">
+          {Object.entries(CHANNEL_COLORS).map(([channel, color]) => (
+            <div
+              key={channel}
+              className="px-3 py-1.5 rounded-full text-xs font-bold shadow-sm"
+              style={{
+                backgroundColor: color,
+                color: getTextColor(channel),
+              }}
+            >
+              {channel}
+            </div>
+          ))}
         </div>
 
-        <div className="hidden md:grid grid-cols-7 gap-3">
-          {calendarDays.map((day, index) => {
-            const dayReservations = day ? getReservationsForDay(day) : [];
-            const past = day ? isPastDate(day) : false;
+        <div className="overflow-x-auto pb-4">
+          <div className="min-w-[760px] md:min-w-0">
+            <div className="grid grid-cols-7 gap-2 md:gap-3 mb-3 text-center text-gray-600 font-bold text-xs md:text-sm">
+              <div>Sun</div>
+              <div>Mon</div>
+              <div>Tue</div>
+              <div>Wed</div>
+              <div>Thu</div>
+              <div>Fri</div>
+              <div>Sat</div>
+            </div>
 
-            return (
-              <div
-                key={index}
-                onClick={() => openReservationForm(day, past)}
-                className={`
-                  min-h-[135px] lg:min-h-[175px]
-                  rounded-3xl
-                  border
-                  shadow-lg
-                  overflow-hidden
-                  transition
-                  bg-white/80
-                  backdrop-blur-xl
-                  ${
-                    past
-                      ? "opacity-55 grayscale cursor-not-allowed"
-                      : day
-                      ? "cursor-pointer hover:shadow-2xl hover:scale-[1.01] hover:ring-2 hover:ring-[#0D3B66]/20"
-                      : ""
-                  }
-                `}
-                style={{
-                  backgroundColor: past ? "#E5E7EB" : "rgba(255,255,255,0.82)",
-                  borderColor: past ? "#D1D5DB" : "rgba(255,255,255,0.85)",
-                }}
-              >
-                {day && (
-                  <>
-                    {dayReservations.length === 0 ? (
-                      <div className="h-full p-4 lg:p-5 flex flex-col justify-between">
-                        <div>
-                          <div
-                            className={`font-bold text-lg lg:text-xl ${
-                              past
-                                ? "text-gray-500 line-through"
-                                : "text-gray-900"
-                            }`}
-                          >
-                            {day}
-                          </div>
+            <div className="grid grid-cols-7 gap-2 md:gap-3">
+              {calendarDays.map((day, index) => {
+                const dayReservations = day ? getReservationsForDay(day) : [];
+                const past = day ? isPastDate(day) : false;
 
-                          <p
-                            className={
-                              past
-                                ? "text-gray-500 mt-5 lg:mt-8"
-                                : "text-gray-900 mt-5 lg:mt-8"
-                            }
-                          >
-                            RM160
-                          </p>
-
-                          {past && (
-                            <p className="text-xs text-gray-500 mt-3">
-                              Past date
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    ) : (
-                      <div
-                        className="h-full grid"
-                        style={{
-                          gridTemplateRows: `repeat(${dayReservations.length}, minmax(0, 1fr))`,
-                        }}
-                      >
-                        {dayReservations.map(
-                          (reservation, reservationIndex) => {
-                            const bgColor =
-                              CHANNEL_COLORS[reservation.channel] || "#6B7280";
-                            const textColor = getTextColor(
-                              reservation.channel
-                            );
-
-                            return (
-                              <div
-                                key={reservation.id}
-                                className="p-3 lg:p-4 flex flex-col justify-center"
-                                style={{
-                                  backgroundColor: past ? "#D1D5DB" : bgColor,
-                                  color: past ? "#6B7280" : textColor,
-                                  borderTop:
-                                    reservationIndex === 0
-                                      ? "none"
-                                      : "1px solid rgba(255,255,255,0.35)",
-                                }}
-                              >
-                                {reservationIndex === 0 && (
-                                  <div
-                                    className={`font-bold text-lg lg:text-xl mb-2 lg:mb-3 ${
-                                      past ? "line-through" : ""
-                                    }`}
-                                  >
-                                    {day}
-                                  </div>
-                                )}
-
-                                <div className="text-xs lg:text-sm font-bold leading-tight line-clamp-1">
-                                  {reservation.guest_name}
-                                </div>
-
-                                <div className="text-xs font-semibold mt-1">
-                                  {reservation.channel}
-                                </div>
-
-                                <div className="hidden lg:block text-xs font-semibold mt-1 opacity-90">
-                                  {formatDate(reservation.check_in)} →{" "}
-                                  {formatDate(reservation.check_out)}
-                                </div>
-
-                                <div className="hidden lg:block text-xs font-semibold mt-1 opacity-90 line-clamp-1">
-                                  {getPropertyName(reservation.property_id)}
-                                </div>
-                              </div>
-                            );
-                          }
-                        )}
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        <div className="md:hidden space-y-3">
-          {Array.from({ length: daysInMonth }, (_, index) => index + 1).map(
-            (day) => {
-              const dayReservations = getReservationsForDay(day);
-              const past = isPastDate(day);
-
-              return (
-                <div
-                  key={day}
-                  onClick={() => openReservationForm(day, past)}
-                  className={`rounded-3xl border shadow-md overflow-hidden bg-white/90 ${
-                    past
-                      ? "opacity-60 grayscale"
-                      : "active:scale-[0.98] cursor-pointer"
-                  }`}
-                >
-                  <div className="p-4 flex items-center justify-between">
-                    <div>
-                      <p
-                        className={`font-black text-xl ${
-                          past ? "text-gray-500 line-through" : "text-gray-900"
-                        }`}
-                      >
-                        {day} {monthNames[selectedMonth].slice(0, 3)}
-                      </p>
-
-                      <p className="text-xs text-gray-500 mt-1">
-                        {past
-                          ? "Past date"
-                          : dayReservations.length > 0
-                          ? `${dayReservations.length} booking(s)`
-                          : "Available · Tap to add reservation"}
-                      </p>
-                    </div>
-
-                    <div
-                      className={`px-3 py-1.5 rounded-full text-xs font-bold ${
+                return (
+                  <div
+                    key={index}
+                    onClick={() => openReservationForm(day, past)}
+                    className={`
+                      min-h-[105px] md:min-h-[145px] lg:min-h-[175px]
+                      rounded-2xl md:rounded-3xl
+                      border shadow-md overflow-hidden transition
+                      ${
                         past
-                          ? "bg-gray-200 text-gray-500"
-                          : dayReservations.length > 0
-                          ? "bg-[#0D3B66] text-white"
-                          : "bg-green-100 text-green-700"
-                      }`}
-                    >
-                      {past
-                        ? "Past"
-                        : dayReservations.length > 0
-                        ? "Booked"
-                        : "Open"}
-                    </div>
+                          ? "bg-gray-200 border-gray-300 opacity-70 cursor-not-allowed"
+                          : day
+                          ? "bg-white/90 border-white cursor-pointer hover:shadow-2xl hover:scale-[1.01] hover:ring-2 hover:ring-[#0D3B66]/20"
+                          : "bg-transparent border-transparent shadow-none"
+                      }
+                    `}
+                  >
+                    {day && (
+                      <>
+                        {dayReservations.length === 0 ? (
+                          <div className="h-full p-3 md:p-4 flex flex-col justify-between">
+                            <div>
+                              <div
+                                className={`font-black text-base md:text-xl ${
+                                  past
+                                    ? "text-gray-500 line-through"
+                                    : "text-gray-900"
+                                }`}
+                              >
+                                {day}
+                              </div>
+
+                              <p
+                                className={`text-xs md:text-sm mt-4 md:mt-6 font-semibold ${
+                                  past ? "text-gray-400" : "text-[#0D3B66]"
+                                }`}
+                              >
+                                {past ? "Past" : "Available"}
+                              </p>
+                            </div>
+
+                            {!past && (
+                              <div className="text-[10px] md:text-xs text-green-700 bg-green-100 rounded-full px-2 py-1 w-fit font-bold">
+                                Open
+                              </div>
+                            )}
+                          </div>
+                        ) : (
+                          <div
+                            className="h-full grid"
+                            style={{
+                              gridTemplateRows: `repeat(${Math.min(
+                                dayReservations.length,
+                                3
+                              )}, minmax(0, 1fr))`,
+                            }}
+                          >
+                            {dayReservations.slice(0, 3).map((reservation, reservationIndex) => {
+                              const bgColor =
+                                CHANNEL_COLORS[reservation.channel] || "#6B7280";
+                              const textColor = getTextColor(reservation.channel);
+
+                              return (
+                                <div
+                                  key={reservation.id}
+                                  className="p-2 md:p-3 flex flex-col justify-center"
+                                  style={{
+                                    backgroundColor: past ? "#CBD5E1" : bgColor,
+                                    color: past ? "#475569" : textColor,
+                                    borderTop:
+                                      reservationIndex === 0
+                                        ? "none"
+                                        : "1px solid rgba(255,255,255,0.35)",
+                                  }}
+                                >
+                                  {reservationIndex === 0 && (
+                                    <div
+                                      className={`font-black text-base md:text-xl mb-1 ${
+                                        past ? "line-through" : ""
+                                      }`}
+                                    >
+                                      {day}
+                                    </div>
+                                  )}
+
+                                  <div className="text-[10px] md:text-xs font-black leading-tight line-clamp-1">
+                                    {reservation.guest_name}
+                                  </div>
+
+                                  <div className="text-[10px] md:text-xs font-bold mt-1 opacity-90 line-clamp-1">
+                                    {reservation.channel}
+                                  </div>
+
+                                  <div className="hidden lg:block text-xs font-semibold mt-1 opacity-90 line-clamp-1">
+                                    {getPropertyName(reservation.property_id)}
+                                  </div>
+                                </div>
+                              );
+                            })}
+
+                            {dayReservations.length > 3 && (
+                              <div className="bg-slate-900 text-white text-xs font-bold flex items-center justify-center">
+                                +{dayReservations.length - 3} more
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </>
+                    )}
                   </div>
-
-                  {dayReservations.length > 0 && (
-                    <div className="space-y-2 p-4 pt-0">
-                      {dayReservations.map((reservation) => (
-                        <div
-                          key={reservation.id}
-                          className="rounded-2xl p-4 text-white"
-                          style={{
-                            backgroundColor:
-                              CHANNEL_COLORS[reservation.channel] || "#6B7280",
-                            color: getTextColor(reservation.channel),
-                          }}
-                        >
-                          <p className="font-bold">
-                            {reservation.guest_name}
-                          </p>
-
-                          <p className="text-xs font-semibold mt-1">
-                            {reservation.channel}
-                          </p>
-
-                          <p className="text-xs font-semibold mt-1 opacity-90">
-                            {formatDate(reservation.check_in)} →{" "}
-                            {formatDate(reservation.check_out)}
-                          </p>
-
-                          <p className="text-xs font-semibold mt-1 opacity-90">
-                            {getPropertyName(reservation.property_id)}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              );
-            }
-          )}
+                );
+              })}
+            </div>
+          </div>
         </div>
+
+        <p className="md:hidden text-xs text-gray-500 mt-2">
+          Tip: Swipe left/right to view the full calendar.
+        </p>
       </div>
     </div>
   );
