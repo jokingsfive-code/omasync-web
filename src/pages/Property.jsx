@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import api from "../api/axios";
 
+const API_URL = "https://web-production-2db875.up.railway.app";
+
 export default function Property() {
   const [properties, setProperties] = useState([]);
   const [editId, setEditId] = useState(null);
@@ -40,6 +42,24 @@ export default function Property() {
     if (Array.isArray(payload?.data)) return payload.data;
     if (Array.isArray(payload?.properties)) return payload.properties;
     return [];
+  };
+
+  const getImageUrl = (image) => {
+    if (!image) return null;
+
+    if (String(image).startsWith("http")) {
+      return image;
+    }
+
+    if (String(image).startsWith("/storage")) {
+      return `${API_URL}${image}`;
+    }
+
+    if (String(image).startsWith("storage")) {
+      return `${API_URL}/${image}`;
+    }
+
+    return `${API_URL}/storage/${image}`;
   };
 
   const showToast = (type, message) => {
@@ -148,7 +168,7 @@ export default function Property() {
       image: null,
     });
 
-    setImagePreview(property.image_url || null);
+    setImagePreview(getImageUrl(property.image_url || property.image));
     setShowForm(true);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
@@ -414,87 +434,94 @@ export default function Property() {
               ) : (
                 <>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
-                    {filteredProperties.map((property) => (
-                      <div
-                        key={property.id}
-                        className="group bg-white rounded-[30px] shadow-sm border border-gray-100 hover:shadow-lg transition overflow-hidden"
-                      >
-                        <div className="relative aspect-[4/3] bg-gray-100 overflow-hidden">
-                          {property.image_url ? (
-                            <img
-                              src={property.image_url}
-                              alt={property.name || property.property_name}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                            />
-                          ) : (
-                            <div className="w-full h-full text-gray-400 flex items-center justify-center">
-                              <Building2 size={68} />
+                    {filteredProperties.map((property) => {
+                      const propertyImage = getImageUrl(
+                        property.image_url || property.image
+                      );
+
+                      return (
+                        <div
+                          key={property.id}
+                          className="group bg-white rounded-[30px] shadow-sm border border-gray-100 hover:shadow-lg transition overflow-hidden"
+                        >
+                          <div className="relative aspect-[4/3] bg-gray-100 overflow-hidden">
+                            {propertyImage ? (
+                              <img
+                                src={propertyImage}
+                                alt={property.name || property.property_name}
+                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                              />
+                            ) : (
+                              <div className="w-full h-full text-gray-400 flex items-center justify-center">
+                                <Building2 size={68} />
+                              </div>
+                            )}
+
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
+
+                            <div className="absolute top-4 right-4 flex gap-2">
+                              <button
+                                onClick={() => startEdit(property)}
+                                className="w-10 h-10 rounded-2xl bg-white/95 text-gray-950 flex items-center justify-center hover:bg-gray-100 shadow-lg transition"
+                              >
+                                <Pencil size={17} />
+                              </button>
+
+                              <button
+                                onClick={() => deleteProperty(property.id)}
+                                className="w-10 h-10 rounded-2xl bg-white/95 text-red-500 flex items-center justify-center hover:bg-red-50 shadow-lg transition"
+                              >
+                                <Trash2 size={17} />
+                              </button>
                             </div>
-                          )}
 
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-transparent to-transparent" />
-
-                          <div className="absolute top-4 right-4 flex gap-2">
-                            <button
-                              onClick={() => startEdit(property)}
-                              className="w-10 h-10 rounded-2xl bg-white/95 text-gray-950 flex items-center justify-center hover:bg-gray-100 shadow-lg transition"
-                            >
-                              <Pencil size={17} />
-                            </button>
-
-                            <button
-                              onClick={() => deleteProperty(property.id)}
-                              className="w-10 h-10 rounded-2xl bg-white/95 text-red-500 flex items-center justify-center hover:bg-red-50 shadow-lg transition"
-                            >
-                              <Trash2 size={17} />
-                            </button>
+                            <div className="absolute bottom-4 left-4 right-4">
+                              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/95 text-gray-950 font-black text-xs shadow-lg">
+                                <Home size={15} />
+                                Property Unit
+                              </div>
+                            </div>
                           </div>
 
-                          <div className="absolute bottom-4 left-4 right-4">
-                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/95 text-gray-950 font-black text-xs shadow-lg">
-                              <Home size={15} />
-                              Property Unit
+                          <div className="p-5 sm:p-6">
+                            <div className="flex items-start justify-between gap-4">
+                              <div className="min-w-0">
+                                <h3 className="text-xl sm:text-2xl font-black text-gray-950 leading-tight truncate">
+                                  {property.name || property.property_name}
+                                </h3>
+
+                                <p className="text-gray-500 mt-2 flex items-center gap-2 text-sm">
+                                  <MapPin size={16} />
+                                  <span className="truncate">
+                                    {property.location || "-"}
+                                  </span>
+                                </p>
+                              </div>
+
+                              <div className="w-11 h-11 rounded-2xl bg-gray-100 text-gray-950 flex items-center justify-center shrink-0">
+                                <Building2 size={22} />
+                              </div>
                             </div>
-                          </div>
-                        </div>
 
-                        <div className="p-5 sm:p-6">
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="min-w-0">
-                              <h3 className="text-xl sm:text-2xl font-black text-gray-950 leading-tight truncate">
-                                {property.name || property.property_name}
-                              </h3>
+                            <div className="mt-5 rounded-[24px] bg-gray-50 border border-gray-100 p-4">
+                              <p className="text-xs text-gray-500 font-bold">
+                                Property Value
+                              </p>
 
-                              <p className="text-gray-500 mt-2 flex items-center gap-2 text-sm">
-                                <MapPin size={16} />
-                                <span className="truncate">
-                                  {property.location || "-"}
-                                </span>
+                              <p className="text-2xl font-black text-gray-950 mt-1">
+                                RM{" "}
+                                {Number(property.price || 0).toLocaleString()}
                               </p>
                             </div>
 
-                            <div className="w-11 h-11 rounded-2xl bg-gray-100 text-gray-950 flex items-center justify-center shrink-0">
-                              <Building2 size={22} />
-                            </div>
-                          </div>
-
-                          <div className="mt-5 rounded-[24px] bg-gray-50 border border-gray-100 p-4">
-                            <p className="text-xs text-gray-500 font-bold">
-                              Property Value
-                            </p>
-
-                            <p className="text-2xl font-black text-gray-950 mt-1">
-                              RM {Number(property.price || 0).toLocaleString()}
+                            <p className="mt-5 text-gray-600 text-sm leading-relaxed line-clamp-3 min-h-[58px]">
+                              {property.description ||
+                                "No description provided."}
                             </p>
                           </div>
-
-                          <p className="mt-5 text-gray-600 text-sm leading-relaxed line-clamp-3 min-h-[58px]">
-                            {property.description ||
-                              "No description provided."}
-                          </p>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
 
                   {filteredProperties.length === 0 && (
