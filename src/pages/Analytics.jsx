@@ -170,11 +170,6 @@ export default function Analytics() {
   const revPAR =
     totalAvailableNights > 0 ? totalRevenue / totalAvailableNights : 0;
 
-  const getPropertyName = (propertyId) => {
-    const property = properties.find((p) => Number(p.id) === Number(propertyId));
-    return property ? property.name || property.property_name : "-";
-  };
-
   const formatCurrency = (amount) => {
     return `RM ${Number(amount || 0).toLocaleString()}`;
   };
@@ -286,10 +281,8 @@ export default function Analytics() {
     <div
       className={`rounded-[26px] sm:rounded-[30px] p-5 sm:p-6 text-white shadow-sm border border-white/20 ${className}`}
     >
-      <div className="flex items-start justify-between gap-3">
-        <div className="w-11 h-11 rounded-2xl bg-white/18 flex items-center justify-center">
-          <Icon size={22} />
-        </div>
+      <div className="w-11 h-11 rounded-2xl bg-white/18 flex items-center justify-center">
+        <Icon size={22} />
       </div>
 
       <p className="text-white/75 text-xs sm:text-sm mt-5">{title}</p>
@@ -305,29 +298,27 @@ export default function Analytics() {
       <main className="min-h-screen flex-1 w-full px-3 sm:px-6 lg:px-8 py-5 lg:py-8">
         <div className="w-full max-w-[1600px] mx-auto">
           <div className="mb-5 sm:mb-7 pl-20 sm:pl-0">
-            <div className="flex flex-col xl:flex-row xl:items-end xl:justify-between gap-5">
-              <div>
-                <div className="flex items-center gap-3">
-                  <div className="hidden sm:flex w-11 h-11 rounded-2xl bg-black text-white items-center justify-center shadow-sm">
-                    <BarChart3 size={22} />
-                  </div>
+            <div className="flex flex-col gap-5">
+              <div className="flex items-center gap-3">
+                <div className="hidden sm:flex w-11 h-11 rounded-2xl bg-black text-white items-center justify-center shadow-sm">
+                  <BarChart3 size={22} />
+                </div>
 
-                  <div>
-                    <h1 className="text-3xl sm:text-4xl font-black text-gray-950 tracking-tight">
-                      Analytics
-                    </h1>
-                    <p className="text-sm sm:text-base text-gray-500">
-                      Occupancy, ADR, RevPAR and revenue performance.
-                    </p>
-                  </div>
+                <div>
+                  <h1 className="text-3xl sm:text-4xl font-black text-gray-950 tracking-tight">
+                    Analytics
+                  </h1>
+                  <p className="text-sm sm:text-base text-gray-500">
+                    Occupancy, ADR, RevPAR and revenue performance.
+                  </p>
                 </div>
               </div>
 
-              <div className="bg-white rounded-[26px] border border-gray-100 shadow-sm p-3 grid grid-cols-1 sm:grid-cols-3 gap-3 xl:min-w-[620px]">
+              <div className="w-full bg-white rounded-[26px] border border-gray-100 shadow-sm p-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <select
                   value={selectedMonth}
                   onChange={(e) => setSelectedMonth(Number(e.target.value))}
-                  className="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm font-bold outline-none focus:ring-2 focus:ring-black/10"
+                  className="w-full h-14 px-4 rounded-2xl border border-gray-200 bg-white text-base font-bold text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
                 >
                   {MONTHS.map((month, index) => (
                     <option key={month} value={index}>
@@ -339,7 +330,7 @@ export default function Analytics() {
                 <select
                   value={selectedYear}
                   onChange={(e) => setSelectedYear(Number(e.target.value))}
-                  className="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm font-bold outline-none focus:ring-2 focus:ring-black/10"
+                  className="w-full h-14 px-4 rounded-2xl border border-gray-200 bg-white text-base font-bold text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
                 >
                   {yearOptions.map((year) => (
                     <option key={year} value={year}>
@@ -351,7 +342,7 @@ export default function Analytics() {
                 <select
                   value={selectedProperty}
                   onChange={(e) => setSelectedProperty(e.target.value)}
-                  className="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm font-bold outline-none focus:ring-2 focus:ring-black/10"
+                  className="w-full h-14 px-4 rounded-2xl border border-gray-200 bg-white text-base font-bold text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
                 >
                   <option value="all">All Properties</option>
 
