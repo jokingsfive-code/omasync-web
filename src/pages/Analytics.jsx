@@ -23,18 +23,8 @@ const CHANNEL_COLORS = {
 };
 
 const MONTHS = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
 ];
 
 export default function Analytics() {
@@ -62,7 +52,6 @@ export default function Analytics() {
   const fetchData = async () => {
     try {
       setLoading(true);
-
       const [propertyRes, reservationRes] = await Promise.all([
         api.get("/properties"),
         api.get("/reservations"),
@@ -93,7 +82,6 @@ export default function Analytics() {
 
   const isSameMonthYear = (dateString) => {
     if (!dateString) return false;
-
     const date = new Date(cleanDate(dateString));
 
     return (
@@ -138,7 +126,6 @@ export default function Analytics() {
   );
 
   const totalBookings = filteredReservations.length;
-
   const averageDailyRate =
     totalBookings > 0 ? totalRevenue / totalBookings : 0;
 
@@ -150,9 +137,7 @@ export default function Analytics() {
 
     const start = new Date(cleanDate(checkIn));
     const end = new Date(cleanDate(checkOut));
-
-    const diffMs = end - start;
-    const nights = diffMs / (1000 * 60 * 60 * 24);
+    const nights = (end - start) / (1000 * 60 * 60 * 24);
 
     return nights > 0 ? nights : 0;
   };
@@ -190,7 +175,6 @@ export default function Analytics() {
     );
 
     const availableNights = daysInSelectedMonth;
-
     const occupancy =
       availableNights > 0 ? (bookedNights / availableNights) * 100 : 0;
 
@@ -242,11 +226,11 @@ export default function Analytics() {
     const monthReservations = activeReservations.filter((reservation) => {
       const date = new Date(cleanDate(reservation.check_in));
 
-      const sameYear = date.getFullYear() === Number(selectedYear);
-      const sameMonth = date.getMonth() === index;
-      const sameProperty = matchProperty(reservation);
-
-      return sameYear && sameMonth && sameProperty;
+      return (
+        date.getFullYear() === Number(selectedYear) &&
+        date.getMonth() === index &&
+        matchProperty(reservation)
+      );
     });
 
     const revenue = monthReservations.reduce(
@@ -295,10 +279,10 @@ export default function Analytics() {
     <div className="min-h-screen bg-[#f7f8fb] lg:flex">
       <Sidebar />
 
-      <main className="min-h-screen flex-1 w-full px-3 sm:px-6 lg:px-8 py-5 lg:py-8">
+      <main className="min-h-screen flex-1 w-full px-4 sm:px-6 lg:px-8 py-5 lg:py-8">
         <div className="w-full max-w-[1600px] mx-auto">
-          <div className="mb-5 sm:mb-7 pl-20 sm:pl-0">
-            <div className="flex flex-col gap-5">
+          <div className="mb-5 sm:mb-7">
+            <div className="pl-20 sm:pl-0 mb-5">
               <div className="flex items-center gap-3">
                 <div className="hidden sm:flex w-11 h-11 rounded-2xl bg-black text-white items-center justify-center shadow-sm">
                   <BarChart3 size={22} />
@@ -313,46 +297,46 @@ export default function Analytics() {
                   </p>
                 </div>
               </div>
+            </div>
 
-              <div className="w-full bg-white rounded-[26px] border border-gray-100 shadow-sm p-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <select
-                  value={selectedMonth}
-                  onChange={(e) => setSelectedMonth(Number(e.target.value))}
-                  className="w-full h-14 px-4 rounded-2xl border border-gray-200 bg-white text-base font-bold text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
-                >
-                  {MONTHS.map((month, index) => (
-                    <option key={month} value={index}>
-                      {month}
-                    </option>
-                  ))}
-                </select>
+            <div className="w-full bg-white rounded-[26px] border border-gray-100 shadow-sm p-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <select
+                value={selectedMonth}
+                onChange={(e) => setSelectedMonth(Number(e.target.value))}
+                className="w-full h-14 px-4 rounded-2xl border border-gray-200 bg-white text-base font-bold text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
+              >
+                {MONTHS.map((month, index) => (
+                  <option key={month} value={index}>
+                    {month}
+                  </option>
+                ))}
+              </select>
 
-                <select
-                  value={selectedYear}
-                  onChange={(e) => setSelectedYear(Number(e.target.value))}
-                  className="w-full h-14 px-4 rounded-2xl border border-gray-200 bg-white text-base font-bold text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
-                >
-                  {yearOptions.map((year) => (
-                    <option key={year} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
+              <select
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(Number(e.target.value))}
+                className="w-full h-14 px-4 rounded-2xl border border-gray-200 bg-white text-base font-bold text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
+              >
+                {yearOptions.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
 
-                <select
-                  value={selectedProperty}
-                  onChange={(e) => setSelectedProperty(e.target.value)}
-                  className="w-full h-14 px-4 rounded-2xl border border-gray-200 bg-white text-base font-bold text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
-                >
-                  <option value="all">All Properties</option>
+              <select
+                value={selectedProperty}
+                onChange={(e) => setSelectedProperty(e.target.value)}
+                className="w-full h-14 px-4 rounded-2xl border border-gray-200 bg-white text-base font-bold text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
+              >
+                <option value="all">All Properties</option>
 
-                  {properties.map((property) => (
-                    <option key={property.id} value={property.id}>
-                      {property.name || property.property_name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+                {properties.map((property) => (
+                  <option key={property.id} value={property.id}>
+                    {property.name || property.property_name}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
