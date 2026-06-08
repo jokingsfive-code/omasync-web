@@ -194,7 +194,7 @@ export default function Calendar() {
   const selectedBookings = selectedDate ? getBookingsForDate(selectedDate) : [];
 
   return (
-    <div className="min-h-screen bg-[#f7f8fb] lg:flex">
+    <div className="min-h-screen bg-slate-300 lg:flex">
       <Sidebar />
 
       <main className="min-h-screen flex-1 w-full px-3 sm:px-6 lg:px-8 py-5 lg:py-8">
@@ -209,20 +209,20 @@ export default function Calendar() {
                 <h1 className="text-3xl sm:text-4xl font-black text-gray-950 tracking-tight">
                   Calendar
                 </h1>
-                <p className="text-sm sm:text-base text-gray-500">
+                <p className="text-sm sm:text-base text-gray-600">
                   Airbnb style booking calendar.
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="w-full bg-white rounded-[26px] sm:rounded-[30px] border border-gray-100 shadow-sm overflow-hidden">
-            <div className="px-4 sm:px-6 py-5 border-b border-gray-100 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+          <div className="w-full bg-slate-100 rounded-[26px] sm:rounded-[30px] border border-slate-300 shadow-md overflow-hidden">
+            <div className="px-4 sm:px-6 py-5 border-b border-slate-300 bg-slate-50 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
               <div>
                 <h2 className="text-2xl sm:text-3xl font-black text-gray-950">
                   {monthName}
                 </h2>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-600">
                   Tap future date to view booking details.
                 </p>
               </div>
@@ -230,7 +230,7 @@ export default function Calendar() {
               <div className="flex items-center gap-2">
                 <button
                   onClick={goPrevMonth}
-                  className="w-11 h-11 rounded-full border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 active:scale-95 transition"
+                  className="w-11 h-11 rounded-full border border-slate-300 bg-white flex items-center justify-center hover:bg-gray-50 active:scale-95 transition"
                 >
                   <ChevronLeft size={20} />
                 </button>
@@ -244,14 +244,14 @@ export default function Calendar() {
 
                 <button
                   onClick={goNextMonth}
-                  className="w-11 h-11 rounded-full border border-gray-200 bg-white flex items-center justify-center hover:bg-gray-50 active:scale-95 transition"
+                  className="w-11 h-11 rounded-full border border-slate-300 bg-white flex items-center justify-center hover:bg-gray-50 active:scale-95 transition"
                 >
                   <ChevronRight size={20} />
                 </button>
               </div>
             </div>
 
-            <div className="px-4 sm:px-6 py-4 border-b border-gray-100 overflow-x-auto">
+            <div className="px-4 sm:px-6 py-4 border-b border-slate-300 bg-slate-100 overflow-x-auto">
               <div className="flex items-center gap-4 min-w-max">
                 {channelLabels.map((channel) => {
                   const key = channel.toLowerCase();
@@ -259,7 +259,7 @@ export default function Calendar() {
                   return (
                     <div
                       key={channel}
-                      className="flex items-center gap-2 text-xs sm:text-sm text-gray-600"
+                      className="flex items-center gap-2 text-xs sm:text-sm text-gray-700 font-medium"
                     >
                       <span
                         className={`w-3 h-3 rounded-full ${
@@ -279,13 +279,13 @@ export default function Calendar() {
                 <p className="text-sm">Loading calendar...</p>
               </div>
             ) : (
-              <div className="p-2 sm:p-4">
+              <div className="p-2 sm:p-4 bg-slate-200">
                 <div className="grid grid-cols-7 gap-1.5 sm:gap-2">
                   {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(
                     (day) => (
                       <div
                         key={day}
-                        className="h-8 sm:h-10 flex items-center justify-center text-[10px] sm:text-xs font-black text-gray-400 uppercase tracking-wide"
+                        className="h-8 sm:h-10 flex items-center justify-center text-[10px] sm:text-xs font-black text-slate-600 uppercase tracking-wide"
                       >
                         {day}
                       </div>
@@ -317,12 +317,12 @@ export default function Calendar() {
                           !date
                             ? "bg-transparent border-transparent"
                             : past
-                            ? "bg-gray-50 border-gray-100 opacity-35 cursor-not-allowed"
+                            ? "bg-slate-100 border-slate-200 opacity-45 cursor-not-allowed"
                             : active
                             ? "bg-gray-950 border-gray-950 shadow-lg"
                             : hasBooking
                             ? `${mainStyle.main} shadow-md hover:shadow-lg active:scale-[0.98]`
-                            : "bg-white border-gray-100 hover:border-gray-300 hover:shadow-sm active:scale-[0.98]"
+                            : "bg-white border-slate-300 shadow-sm hover:border-slate-400 hover:shadow-md active:scale-[0.98]"
                         }`}
                       >
                         {date && (
@@ -336,7 +336,7 @@ export default function Calendar() {
                                     ? "bg-white/95 text-gray-950"
                                     : isToday(date)
                                     ? "bg-black text-white"
-                                    : "text-gray-900"
+                                    : "text-gray-950"
                                 }`}
                               >
                                 {date.getDate()}
@@ -347,7 +347,7 @@ export default function Calendar() {
                                   className={`text-[9px] sm:text-xs font-black ${
                                     hasBooking && !past
                                       ? "text-white"
-                                      : "text-gray-400"
+                                      : "text-slate-500"
                                   }`}
                                 >
                                   {bookings.length}
@@ -397,7 +397,7 @@ export default function Calendar() {
           </div>
 
           {selectedDate && (
-            <div className="mt-4 bg-white rounded-[24px] border border-gray-100 shadow-sm p-4 sm:p-5">
+            <div className="mt-4 bg-slate-100 rounded-[24px] border border-slate-300 shadow-md p-4 sm:p-5">
               <div className="flex items-start justify-between gap-4 mb-4">
                 <div>
                   <h3 className="text-lg sm:text-xl font-black text-gray-950">
@@ -408,21 +408,21 @@ export default function Calendar() {
                       year: "numeric",
                     })}
                   </h3>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-600">
                     {selectedBookings.length} booking found.
                   </p>
                 </div>
 
                 <button
                   onClick={() => setSelectedDate(null)}
-                  className="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center hover:bg-gray-200 transition"
+                  className="w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center hover:bg-slate-300 transition"
                 >
                   <X size={18} />
                 </button>
               </div>
 
               {selectedBookings.length === 0 ? (
-                <div className="rounded-2xl bg-gray-50 border border-gray-100 p-4 text-sm text-gray-500">
+                <div className="rounded-2xl bg-white border border-slate-300 p-4 text-sm text-gray-500">
                   No booking on this date.
                 </div>
               ) : (
@@ -430,7 +430,7 @@ export default function Calendar() {
                   {selectedBookings.map((booking) => (
                     <div
                       key={booking.id}
-                      className="rounded-2xl border border-gray-100 p-4 flex items-start justify-between gap-3"
+                      className="rounded-2xl bg-white border border-slate-300 p-4 flex items-start justify-between gap-3"
                     >
                       <div>
                         <div className="font-black text-gray-950">
