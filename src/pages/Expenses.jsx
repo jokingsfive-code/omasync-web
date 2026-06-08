@@ -162,7 +162,7 @@ export default function Expenses() {
   };
 
   const fieldClass =
-    "h-12 sm:h-14 w-full min-w-0 max-w-full px-4 rounded-2xl border border-gray-200 bg-white text-sm font-bold text-gray-900 outline-none appearance-none focus:border-black focus:ring-4 focus:ring-black/5 transition";
+    "h-11 sm:h-14 w-full min-w-0 max-w-full px-4 rounded-2xl border border-gray-200 bg-white text-[16px] font-bold text-gray-900 outline-none appearance-none focus:border-black focus:ring-4 focus:ring-black/5 transition";
 
   const stats = [
     {
@@ -208,7 +208,7 @@ export default function Expenses() {
             </div>
           )}
 
-          <div className="pl-16 sm:pl-0 mb-5 sm:mb-7">
+          <div className="pl-16 sm:pl-0 mb-4 sm:mb-7">
             <div className="flex items-center gap-3">
               <div className="hidden sm:flex w-11 h-11 rounded-2xl bg-black text-white items-center justify-center">
                 <Wallet size={22} />
@@ -232,17 +232,17 @@ export default function Expenses() {
               return (
                 <div
                   key={stat.label}
-                  className={`rounded-[26px] sm:rounded-[32px] p-5 sm:p-6 text-white shadow-sm min-h-[130px] sm:min-h-[170px] ${stat.className}`}
+                  className={`rounded-[22px] sm:rounded-[32px] p-4 sm:p-6 text-white shadow-sm min-h-[105px] sm:min-h-[170px] ${stat.className}`}
                 >
-                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white/20 flex items-center justify-center">
-                    <Icon size={19} />
+                  <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-white/20 flex items-center justify-center">
+                    <Icon size={18} />
                   </div>
 
-                  <p className="text-white/75 text-xs sm:text-sm mt-5">
+                  <p className="text-white/75 text-xs sm:text-sm mt-3 sm:mt-5">
                     {stat.label}
                   </p>
 
-                  <h2 className="text-2xl sm:text-3xl font-black mt-1">
+                  <h2 className="text-xl sm:text-3xl font-black mt-1">
                     {stat.value}
                   </h2>
                 </div>
@@ -250,10 +250,10 @@ export default function Expenses() {
             })}
           </div>
 
-          <div className="w-full max-w-full overflow-visible bg-white rounded-[28px] sm:rounded-[34px] border border-gray-100 shadow-sm p-4 sm:p-7 mb-5 sm:mb-7">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-11 h-11 rounded-2xl bg-black text-white flex items-center justify-center shadow-lg shadow-black/10">
-                <PlusCircle size={20} />
+          <div className="w-full max-w-full overflow-visible bg-white rounded-[24px] sm:rounded-[34px] border border-gray-100 shadow-sm p-3.5 sm:p-7 mb-5 sm:mb-7">
+            <div className="flex items-center gap-3 mb-4 sm:mb-5">
+              <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-black text-white flex items-center justify-center shadow-lg shadow-black/10">
+                <PlusCircle size={19} />
               </div>
 
               <div>
@@ -268,7 +268,7 @@ export default function Expenses() {
 
             <form
               onSubmit={saveExpense}
-              className="w-full min-w-0 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-3"
+              className="w-full min-w-0 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-2.5 sm:gap-3"
             >
               <select
                 value={form.property_id}
@@ -330,14 +330,14 @@ export default function Expenses() {
                 calendarClassName="omasync-calendar"
               />
 
-              <button className="h-12 sm:h-14 sm:col-span-2 xl:col-span-5 bg-black text-white rounded-2xl font-black text-sm sm:text-base active:scale-[0.98] shadow-lg shadow-black/10">
+              <button className="h-11 sm:h-14 sm:col-span-2 xl:col-span-5 bg-black text-white rounded-2xl font-black text-[16px] active:scale-[0.98] shadow-lg shadow-black/10">
                 Save Expense
               </button>
             </form>
           </div>
 
-          <div className="bg-white rounded-[28px] sm:rounded-[34px] shadow-sm p-4 sm:p-7 border border-gray-100">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
+          <div className="bg-white rounded-[24px] sm:rounded-[34px] shadow-sm p-3.5 sm:p-7 border border-gray-100">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4 sm:mb-5">
               <div>
                 <h2 className="text-xl sm:text-2xl font-black text-gray-950">
                   Expense Records
@@ -354,7 +354,7 @@ export default function Expenses() {
             </div>
 
             {loading ? (
-              <div className="h-[300px] bg-gray-50 rounded-[26px] flex flex-col items-center justify-center text-gray-500">
+              <div className="h-[260px] bg-gray-50 rounded-[24px] flex flex-col items-center justify-center text-gray-500">
                 <Loader2 className="animate-spin mb-3" size={30} />
                 <p className="text-sm">Loading expenses...</p>
               </div>
@@ -363,11 +363,11 @@ export default function Expenses() {
                 {expenses.map((expense) => (
                   <div
                     key={expense.id}
-                    className="bg-gray-50 rounded-[24px] p-4 sm:p-5 border border-gray-100 hover:bg-white hover:shadow-md transition"
+                    className="bg-gray-50 rounded-[22px] p-4 sm:p-5 border border-gray-100 hover:bg-white hover:shadow-md transition"
                   >
                     <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0">
-                        <p className="font-black text-lg text-gray-950 truncate">
+                        <p className="font-black text-base sm:text-lg text-gray-950 truncate">
                           {expense.description || "Untitled Expense"}
                         </p>
 
@@ -397,12 +397,12 @@ export default function Expenses() {
                       </span>
                     </div>
 
-                    <div className="mt-5 pt-4 border-t border-gray-200 flex items-center justify-between">
+                    <div className="mt-4 pt-4 border-t border-gray-200 flex items-center justify-between">
                       <p className="text-xs text-gray-400 font-black uppercase">
                         Amount
                       </p>
 
-                      <p className="font-black text-red-600 text-2xl">
+                      <p className="font-black text-red-600 text-xl sm:text-2xl">
                         RM {Number(expense.amount || 0).toLocaleString()}
                       </p>
                     </div>
@@ -410,7 +410,7 @@ export default function Expenses() {
                 ))}
 
                 {expenses.length === 0 && (
-                  <div className="xl:col-span-2 text-center py-12 bg-gray-50 rounded-[26px] text-gray-500 font-semibold">
+                  <div className="xl:col-span-2 text-center py-10 bg-gray-50 rounded-[24px] text-gray-500 font-semibold">
                     No expenses found.
                   </div>
                 )}
