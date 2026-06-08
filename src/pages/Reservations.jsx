@@ -2,7 +2,7 @@ import Sidebar from "../components/Sidebar";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import DatePicker from "react-datepicker";
-import { CalendarDays } from "lucide-react";
+import { CalendarDays, MessageCircle } from "lucide-react";
 import api from "../api/axios";
 
 const CHANNEL_COLORS = {
@@ -30,6 +30,7 @@ export default function Reservations() {
   const [form, setForm] = useState({
     property_id: "",
     guest_name: "",
+    guest_phone: "",
     channel: "Airbnb",
     check_in: "",
     check_out: "",
@@ -131,6 +132,7 @@ export default function Reservations() {
 
     const matchesSearch =
       reservation.guest_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      reservation.guest_phone?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       propertyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       reservation.channel?.toLowerCase().includes(searchTerm.toLowerCase());
 
@@ -158,6 +160,7 @@ export default function Reservations() {
     setForm({
       property_id: "",
       guest_name: "",
+      guest_phone: "",
       channel: "Airbnb",
       check_in: selectedDate || "",
       check_out: selectedDate || "",
@@ -182,6 +185,11 @@ export default function Reservations() {
       return;
     }
 
+    if (form.guest_phone && form.guest_phone.replace(/\D/g, "").length < 10) {
+      showToast("error", "Please enter a valid WhatsApp number.");
+      return;
+    }
+
     if (!form.check_in) {
       showToast("error", "Please select check-in date.");
       return;
@@ -196,6 +204,7 @@ export default function Reservations() {
       const payload = {
         property_id: form.property_id,
         guest_name: form.guest_name,
+        guest_phone: form.guest_phone || null,
         channel: form.channel,
         check_in: form.check_in,
         check_out: form.check_out,
@@ -209,7 +218,12 @@ export default function Reservations() {
         showToast("success", "Reservation updated successfully.");
       } else {
         await api.post("/reservations", payload);
-        showToast("success", "Reservation added successfully.");
+        showToast(
+          "success",
+          form.guest_phone
+            ? "Reservation added and WhatsApp sent."
+            : "Reservation added successfully."
+        );
       }
 
       resetForm();
@@ -228,6 +242,7 @@ export default function Reservations() {
     setForm({
       property_id: reservation.property_id || "",
       guest_name: reservation.guest_name || "",
+      guest_phone: reservation.guest_phone || "",
       channel: reservation.channel || "Airbnb",
       check_in: reservation.check_in || "",
       check_out: reservation.check_out || "",
@@ -266,7 +281,7 @@ export default function Reservations() {
     <button
       type="button"
       onClick={onClick}
-      className="w-full h-12 sm:h-14 border border-slate-300 rounded-2xl px-4 bg-white font-black outline-none flex items-center justify-between text-left hover:border-slate-500 hover:shadow-md transition"
+      className="w-full h-12 sm:h-14 border border-slate-300 rounded-2xl px-4 bg-white text-[16px] font-black outline-none flex items-center justify-between text-left hover:border-slate-500 hover:shadow-md transition"
     >
       <span className={value ? "text-gray-950" : "text-gray-400"}>
         {value || placeholder}
@@ -275,11 +290,14 @@ export default function Reservations() {
     </button>
   );
 
+  const fieldClass =
+    "w-full h-12 sm:h-14 border border-slate-300 rounded-2xl px-4 bg-white text-[16px] font-bold outline-none focus:ring-4 focus:ring-black/5 focus:border-black transition";
+
   return (
     <div className="min-h-screen bg-slate-300 lg:flex">
       <Sidebar />
 
-      <main className="min-h-screen flex-1 w-full px-4 sm:px-6 lg:px-8 py-5 lg:py-8">
+      <main className="min-h-screen flex-1 w-full px-4 sm:px-6 lg:px-8 py-5 lg:py-8 overflow-x-hidden">
         <div className="w-full max-w-[1600px] mx-auto">
           {toast && (
             <div className="fixed top-6 right-4 left-4 md:left-auto md:right-6 z-50">
@@ -309,9 +327,20 @@ export default function Reservations() {
 
           {viewMode !== "list" && (
             <div className="bg-slate-100 rounded-[24px] sm:rounded-[30px] shadow-md p-4 sm:p-7 mb-5 sm:mb-7 border border-slate-300">
-              <h2 className="text-xl sm:text-2xl font-black mb-5 text-gray-950">
-                {editId ? "Edit Reservation" : "New Reservation"}
-              </h2>
+              <div className="flex items-center justify-between gap-3 mb-5">
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-black text-gray-950">
+                    {editId ? "Edit Reservation" : "New Reservation"}
+                  </h2>
+                  <p className="text-sm text-gray-600">
+                    WhatsApp confirmation will send automatically if phone is filled.
+                  </p>
+                </div>
+
+                <div className="hidden sm:flex w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 items-center justify-center">
+                  <MessageCircle size={23} />
+                </div>
+              </div>
 
               {selectedDate && !editId && (
                 <div className="mb-5 bg-[#0D3B66]/10 text-[#0D3B66] rounded-2xl px-5 py-3 font-black">
@@ -332,7 +361,7 @@ export default function Reservations() {
                       onChange={(e) =>
                         setForm({ ...form, property_id: e.target.value })
                       }
-                      className="w-full h-12 sm:h-14 border border-slate-300 rounded-2xl px-4 bg-white font-bold outline-none"
+                      className={fieldClass}
                     >
                       <option value="">Select Property</option>
 
@@ -355,7 +384,23 @@ export default function Reservations() {
                         setForm({ ...form, guest_name: e.target.value })
                       }
                       placeholder="Guest name"
-                      className="w-full h-12 sm:h-14 border border-slate-300 rounded-2xl px-4 bg-white font-bold outline-none"
+                      className={fieldClass}
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-black mb-2 text-gray-900">
+                      Guest WhatsApp
+                    </label>
+
+                    <input
+                      type="tel"
+                      value={form.guest_phone}
+                      onChange={(e) =>
+                        setForm({ ...form, guest_phone: e.target.value })
+                      }
+                      placeholder="60123456789"
+                      className={fieldClass}
                     />
                   </div>
 
@@ -369,7 +414,7 @@ export default function Reservations() {
                       onChange={(e) =>
                         setForm({ ...form, channel: e.target.value })
                       }
-                      className="w-full h-12 sm:h-14 border border-slate-300 rounded-2xl px-4 bg-white font-bold outline-none"
+                      className={fieldClass}
                     >
                       <option value="Airbnb">Airbnb</option>
                       <option value="Agoda">Agoda</option>
@@ -431,7 +476,7 @@ export default function Reservations() {
                         setForm({ ...form, total_price: e.target.value })
                       }
                       placeholder="0"
-                      className="w-full h-12 sm:h-14 border border-slate-300 rounded-2xl px-4 bg-white font-bold outline-none"
+                      className={fieldClass}
                     />
                   </div>
 
@@ -445,7 +490,7 @@ export default function Reservations() {
                       onChange={(e) =>
                         setForm({ ...form, status: e.target.value })
                       }
-                      className="w-full h-12 sm:h-14 border border-slate-300 rounded-2xl px-4 bg-white font-bold outline-none"
+                      className={fieldClass}
                     >
                       <option value="Confirmed">Confirmed</option>
                       <option value="Checked In">Checked In</option>
@@ -454,7 +499,7 @@ export default function Reservations() {
                     </select>
                   </div>
 
-                  <div className="sm:col-span-2">
+                  <div>
                     <label className="block text-sm font-black mb-2 text-gray-900">
                       Notes
                     </label>
@@ -465,7 +510,7 @@ export default function Reservations() {
                         setForm({ ...form, notes: e.target.value })
                       }
                       placeholder="Optional notes"
-                      className="w-full h-12 sm:h-14 border border-slate-300 rounded-2xl px-4 bg-white font-bold outline-none"
+                      className={fieldClass}
                     />
                   </div>
                 </div>
@@ -473,7 +518,7 @@ export default function Reservations() {
                 <div className="mt-5 flex flex-col sm:flex-row gap-3">
                   <button
                     type="submit"
-                    className="bg-black text-white px-6 py-3 rounded-2xl font-black hover:bg-gray-800"
+                    className="bg-black text-white px-6 py-3 rounded-2xl font-black hover:bg-gray-800 active:scale-[0.98] transition"
                   >
                     {editId ? "Update Reservation" : "Add Reservation"}
                   </button>
@@ -507,8 +552,8 @@ export default function Reservations() {
                 <input
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  placeholder="Search guest, property or channel..."
-                  className="px-5 py-3 rounded-2xl border border-slate-300 bg-white shadow-sm w-full xl:min-w-[280px] font-semibold focus:outline-none focus:ring-2 focus:ring-black/10"
+                  placeholder="Search guest, phone, property or channel..."
+                  className="px-5 py-3 rounded-2xl border border-slate-300 bg-white shadow-sm w-full xl:min-w-[280px] text-[16px] font-semibold focus:outline-none focus:ring-2 focus:ring-black/10"
                 />
 
                 <div className="bg-slate-300 p-1.5 rounded-2xl grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -675,6 +720,13 @@ export default function Reservations() {
                         </div>
                       )}
                     </div>
+
+                    {reservation.guest_phone && (
+                      <div className="mt-4 pt-4 border-t border-slate-100 flex items-center gap-2 text-sm text-emerald-700 font-black">
+                        <MessageCircle size={16} />
+                        WhatsApp: {reservation.guest_phone}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
