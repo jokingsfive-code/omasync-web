@@ -125,7 +125,8 @@ export default function Maintenance() {
         reported_by: form.reported_by || null,
         assigned_to: form.assigned_to || null,
         reported_date: form.reported_date || null,
-        completed_date: form.completed_date || null,
+        completed_date:
+          form.status === "Completed" ? form.completed_date || null : null,
         cost: form.cost || 0,
       };
 
@@ -194,7 +195,7 @@ export default function Maintenance() {
         completed_date:
           status === "Completed"
             ? new Date().toISOString().slice(0, 10)
-            : ticket.completed_date || null,
+            : null,
         cost: ticket.cost || 0,
       });
 
@@ -216,6 +217,17 @@ export default function Maintenance() {
   const formatDate = (value) => {
     if (!value) return "-";
     return String(value).slice(0, 10);
+  };
+
+  const handleStatusChange = (value) => {
+    setForm({
+      ...form,
+      status: value,
+      completed_date:
+        value === "Completed"
+          ? form.completed_date || new Date().toISOString().slice(0, 10)
+          : "",
+    });
   };
 
   const openTickets = tickets.filter((ticket) => ticket.status === "Open");
@@ -328,7 +340,7 @@ export default function Maintenance() {
 
         <select
           value={form.status}
-          onChange={(e) => setForm({ ...form, status: e.target.value })}
+          onChange={(e) => handleStatusChange(e.target.value)}
           className={fieldClass}
         >
           <option>Open</option>
@@ -366,14 +378,16 @@ export default function Maintenance() {
           className={fieldClass}
         />
 
-        <input
-          type="date"
-          value={form.completed_date}
-          onChange={(e) =>
-            setForm({ ...form, completed_date: e.target.value })
-          }
-          className={fieldClass}
-        />
+        {form.status === "Completed" && (
+          <input
+            type="date"
+            value={form.completed_date}
+            onChange={(e) =>
+              setForm({ ...form, completed_date: e.target.value })
+            }
+            className={fieldClass}
+          />
+        )}
 
         <textarea
           value={form.description}
