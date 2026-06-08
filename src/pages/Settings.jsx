@@ -183,7 +183,7 @@ export default function Settings() {
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 sm:gap-6">
             <div className="bg-white rounded-[24px] sm:rounded-[30px] shadow-sm p-4 sm:p-7 border border-gray-100">
               <div className="flex items-center gap-3 mb-5">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gray-100 text-gray-950 flex items-center justify-center">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-[#eef1f5] text-gray-950 flex items-center justify-center">
                   <Building2 size={22} />
                 </div>
 
@@ -274,7 +274,7 @@ export default function Settings() {
 
               {channels.length === 0 ? (
                 <div className="bg-gray-50 rounded-[22px] p-6 text-center">
-                  <div className="w-14 h-14 mx-auto rounded-3xl bg-gray-100 text-gray-700 flex items-center justify-center">
+                  <div className="w-14 h-14 mx-auto rounded-3xl bg-[#eef1f5] text-gray-700 flex items-center justify-center">
                     <Wifi size={28} />
                   </div>
 
@@ -314,7 +314,7 @@ export default function Settings() {
                           className={`h-fit px-2.5 py-1 rounded-full text-[10px] font-black shrink-0 ${
                             channel.is_active
                               ? "bg-emerald-100 text-emerald-700"
-                              : "bg-gray-100 text-gray-500"
+                              : "bg-[#eef1f5] text-gray-500"
                           }`}
                         >
                           {channel.is_active ? "Active" : "Inactive"}
@@ -360,7 +360,7 @@ export default function Settings() {
 
               <button
                 onClick={clearCache}
-                className="w-full h-12 sm:h-14 bg-gray-100 text-gray-900 rounded-2xl font-black hover:bg-gray-200 transition"
+                className="w-full h-12 sm:h-14 bg-[#eef1f5] text-gray-900 rounded-2xl font-black hover:bg-gray-200 transition"
               >
                 Clear Local Cache
               </button>

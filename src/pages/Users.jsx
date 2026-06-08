@@ -168,7 +168,7 @@ export default function Users() {
 
           <div className="bg-white rounded-[24px] sm:rounded-[30px] shadow-sm p-4 sm:p-7 border border-gray-100 mb-5 sm:mb-6">
             <div className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-gray-100 text-gray-950 flex items-center justify-center">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-[#eef1f5] text-gray-950 flex items-center justify-center">
                 <UserPlus size={22} />
               </div>
 
@@ -241,7 +241,7 @@ export default function Users() {
                 </p>
               </div>
 
-              <div className="px-4 py-2 rounded-2xl bg-gray-100 text-gray-950 font-black text-sm">
+              <div className="px-4 py-2 rounded-2xl bg-[#eef1f5] text-gray-950 font-black text-sm">
                 {users.length}
               </div>
             </div>
@@ -253,7 +253,7 @@ export default function Users() {
               </div>
             ) : users.length === 0 ? (
               <div className="bg-gray-50 rounded-[22px] p-8 text-center">
-                <div className="w-16 h-16 mx-auto rounded-3xl bg-gray-100 text-gray-700 flex items-center justify-center">
+                <div className="w-16 h-16 mx-auto rounded-3xl bg-[#eef1f5] text-gray-700 flex items-center justify-center">
                   <UsersIcon size={32} />
                 </div>
                 <h3 className="text-xl font-black text-gray-950 mt-5">
@@ -288,7 +288,7 @@ export default function Users() {
                               className={`inline-flex px-3 py-1 rounded-full text-xs font-black capitalize ${
                                 user.role === "admin"
                                   ? "bg-emerald-100 text-emerald-700"
-                                  : "bg-gray-100 text-gray-700"
+                                  : "bg-[#eef1f5] text-gray-700"
                               }`}
                             >
                               {user.role}
@@ -331,7 +331,7 @@ export default function Users() {
                           className={`shrink-0 inline-flex px-2.5 py-1 rounded-full text-[10px] font-black capitalize ${
                             user.role === "admin"
                               ? "bg-emerald-100 text-emerald-700"
-                              : "bg-gray-100 text-gray-700"
+                              : "bg-[#eef1f5] text-gray-700"
                           }`}
                         >
                           {user.role}

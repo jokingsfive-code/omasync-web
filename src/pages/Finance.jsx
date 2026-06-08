@@ -436,7 +436,7 @@ export default function Finance() {
                     </p>
                   </div>
 
-                  <div className="px-5 py-3 rounded-2xl bg-gray-100 text-gray-950 font-black text-center">
+                  <div className="px-5 py-3 rounded-2xl bg-[#eef1f5] text-gray-950 font-black text-center">
                     {filteredReservations.length} invoice(s)
                   </div>
                 </div>
@@ -548,7 +548,7 @@ export default function Finance() {
                             </p>
                           </div>
 
-                          <div className="h-4 bg-gray-100 rounded-full overflow-hidden">
+                          <div className="h-4 bg-[#eef1f5] rounded-full overflow-hidden">
                             <div
                               className="h-full rounded-full"
                               style={{
@@ -592,7 +592,7 @@ export default function Finance() {
                             </p>
                           </div>
 
-                          <div className="h-4 bg-gray-100 rounded-full overflow-hidden">
+                          <div className="h-4 bg-[#eef1f5] rounded-full overflow-hidden">
                             <div
                               className="h-full rounded-full bg-gradient-to-r from-red-400 to-orange-500"
                               style={{ width: `${width}%` }}
@@ -665,7 +665,7 @@ export default function Finance() {
                               </span>
                             </div>
 
-                            <div className="h-4 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="h-4 bg-[#eef1f5] rounded-full overflow-hidden">
                               <div
                                 className="h-full rounded-full bg-gradient-to-r from-cyan-300 to-blue-500"
                                 style={{ width: `${revenueWidth}%` }}
@@ -683,7 +683,7 @@ export default function Finance() {
                               </span>
                             </div>
 
-                            <div className="h-4 bg-gray-100 rounded-full overflow-hidden">
+                            <div className="h-4 bg-[#eef1f5] rounded-full overflow-hidden">
                               <div
                                 className="h-full rounded-full bg-gradient-to-r from-red-400 to-orange-500"
                                 style={{ width: `${expenseWidth}%` }}

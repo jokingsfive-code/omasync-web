@@ -415,7 +415,7 @@ export default function Calendar() {
 
                 <button
                   onClick={() => setSelectedDate(null)}
-                  className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition"
+                  className="w-9 h-9 rounded-full bg-[#eef1f5] flex items-center justify-center hover:bg-gray-200 transition"
                 >
                   <X size={18} />
                 </button>

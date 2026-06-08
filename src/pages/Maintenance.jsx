@@ -25,7 +25,7 @@ const STATUS_STYLES = {
   Open: "bg-red-100 text-red-700",
   "In Progress": "bg-blue-100 text-blue-700",
   Completed: "bg-emerald-100 text-emerald-700",
-  Cancelled: "bg-gray-100 text-gray-600",
+  Cancelled: "bg-[#eef1f5] text-gray-600",
 };
 
 export default function Maintenance() {
@@ -281,7 +281,7 @@ export default function Maintenance() {
         <button
           type="button"
           onClick={closeForm}
-          className="xl:hidden w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center"
+          className="xl:hidden w-9 h-9 rounded-full bg-[#eef1f5] flex items-center justify-center"
         >
           <X size={17} />
         </button>
@@ -388,7 +388,7 @@ export default function Maintenance() {
             <button
               type="button"
               onClick={resetForm}
-              className="h-12 px-4 rounded-2xl bg-gray-100 text-gray-900 font-black text-sm"
+              className="h-12 px-4 rounded-2xl bg-[#eef1f5] text-gray-900 font-black text-sm"
             >
               Cancel
             </button>
@@ -415,7 +415,7 @@ export default function Maintenance() {
 
         <span
           className={`px-2.5 py-1 rounded-full text-[10px] font-black h-fit ${
-            PRIORITY_STYLES[ticket.priority] || "bg-gray-100 text-gray-700"
+            PRIORITY_STYLES[ticket.priority] || "bg-[#eef1f5] text-gray-700"
           }`}
         >
           {ticket.priority}
@@ -460,7 +460,7 @@ export default function Maintenance() {
           </p>
           <span
             className={`inline-flex px-2 py-1 rounded-full text-[10px] font-black mt-1 ${
-              STATUS_STYLES[ticket.status] || "bg-gray-100 text-gray-700"
+              STATUS_STYLES[ticket.status] || "bg-[#eef1f5] text-gray-700"
             }`}
           >
             {ticket.status}
@@ -513,7 +513,7 @@ export default function Maintenance() {
           </p>
         </div>
 
-        <div className="w-10 h-10 rounded-2xl bg-gray-100 flex items-center justify-center font-black text-gray-950">
+        <div className="w-10 h-10 rounded-2xl bg-[#eef1f5] flex items-center justify-center font-black text-gray-950">
           {items.length}
         </div>
       </div>
@@ -575,7 +575,7 @@ export default function Maintenance() {
 
             <div className="w-full grid grid-cols-2 gap-3">
               <div className="bg-white rounded-[22px] border border-gray-100 shadow-sm p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-gray-100 text-gray-950 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-2xl bg-[#eef1f5] text-gray-950 flex items-center justify-center">
                   <Plus size={20} />
                 </div>
 

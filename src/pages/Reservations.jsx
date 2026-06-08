@@ -459,7 +459,7 @@ export default function Reservations() {
                 className="px-5 py-3 rounded-2xl border border-gray-200 bg-white shadow-sm w-full xl:min-w-[280px] focus:outline-none focus:ring-2 focus:ring-[#0D3B66]"
               />
 
-              <div className="bg-gray-100 p-1.5 rounded-2xl grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div className="bg-[#eef1f5] p-1.5 rounded-2xl grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <button
                   onClick={() => setFilter("all")}
                   className={`px-4 py-2.5 rounded-xl font-semibold transition ${
@@ -587,7 +587,7 @@ export default function Reservations() {
                             : reservation.status === "Checked In"
                             ? "bg-blue-100 text-blue-700"
                             : reservation.status === "Checked Out"
-                            ? "bg-gray-100 text-gray-700"
+                            ? "bg-[#eef1f5] text-gray-700"
                             : "bg-red-100 text-red-600"
                         }`}
                       >
