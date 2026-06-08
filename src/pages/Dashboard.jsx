@@ -237,10 +237,10 @@ export default function Dashboard() {
       <main className="min-h-screen flex-1 w-full px-4 sm:px-6 lg:px-8 py-5 lg:py-8">
         <div className="w-full max-w-[1600px] mx-auto">
           <div className="pl-20 sm:pl-0 mb-4 sm:mb-7">
-            <h1 className="text-3xl sm:text-4xl font-black text-gray-950 tracking-tight">
+            <h1 className="text-4xl sm:text-5xl font-black text-gray-950 tracking-tight">
               Dashboard
             </h1>
-            <p className="text-sm sm:text-base text-gray-500">
+            <p className="text-base sm:text-lg text-gray-600">
               Smart channel manager overview.
             </p>
           </div>
@@ -253,21 +253,21 @@ export default function Dashboard() {
                 <Link
                   to={card.link}
                   key={card.title}
-                  className={`rounded-[20px] sm:rounded-[30px] p-3 sm:p-6 text-white shadow-sm bg-gradient-to-br ${card.gradient} min-h-[108px] sm:min-h-[170px] active:scale-[0.98] transition`}
+                  className={`rounded-[20px] sm:rounded-[30px] p-3 sm:p-6 text-white shadow-sm bg-gradient-to-br ${card.gradient} min-h-[112px] sm:min-h-[170px] active:scale-[0.98] transition`}
                 >
                   <div className="w-8 h-8 sm:w-11 sm:h-11 rounded-2xl bg-white/20 flex items-center justify-center">
-                    <Icon size={17} />
+                    <Icon size={18} />
                   </div>
 
-                  <p className="text-white/75 text-[10px] sm:text-sm mt-3 sm:mt-5 truncate">
+                  <p className="text-white/80 text-xs sm:text-base mt-3 sm:mt-5 truncate">
                     {card.title}
                   </p>
 
-                  <h2 className="text-lg sm:text-3xl font-black mt-0.5 truncate">
+                  <h2 className="text-2xl sm:text-4xl font-black mt-1 truncate">
                     {card.value}
                   </h2>
 
-                  <p className="text-white/60 text-[10px] sm:text-xs mt-1 truncate">
+                  <p className="text-white/65 text-xs sm:text-sm mt-1 truncate">
                     {card.subtitle}
                   </p>
                 </Link>
@@ -278,17 +278,17 @@ export default function Dashboard() {
           <div className="bg-white rounded-[24px] sm:rounded-[30px] shadow-sm p-4 sm:p-7 border border-gray-100 mb-5 sm:mb-7">
             <div className="flex items-center justify-between gap-4 mb-4 sm:mb-6">
               <div>
-                <h2 className="text-lg sm:text-2xl font-black text-gray-950">
+                <h2 className="text-xl sm:text-3xl font-black text-gray-950">
                   Operations
                 </h2>
-                <p className="text-xs sm:text-sm text-gray-500">
+                <p className="text-sm sm:text-base text-gray-500">
                   Guest movement and cleaning status.
                 </p>
               </div>
 
               <Link
                 to="/housekeeping"
-                className="px-3 py-2 sm:px-5 sm:py-3 rounded-2xl bg-black text-white font-black text-xs sm:text-sm"
+                className="px-4 py-2 sm:px-5 sm:py-3 rounded-2xl bg-black text-white font-black text-sm sm:text-base"
               >
                 Open
               </Link>
@@ -302,21 +302,21 @@ export default function Dashboard() {
                   <Link
                     to={card.link}
                     key={card.title}
-                    className={`rounded-[18px] sm:rounded-[26px] p-2.5 sm:p-5 text-white shadow-sm bg-gradient-to-br ${card.color} min-h-[92px] sm:min-h-[155px] active:scale-[0.98] transition`}
+                    className={`rounded-[18px] sm:rounded-[26px] p-2.5 sm:p-5 text-white shadow-sm bg-gradient-to-br ${card.color} min-h-[96px] sm:min-h-[155px] active:scale-[0.98] transition`}
                   >
                     <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-xl sm:rounded-2xl bg-white/20 flex items-center justify-center">
-                      <Icon size={15} />
+                      <Icon size={16} />
                     </div>
 
-                    <p className="text-white/75 text-[9px] sm:text-sm mt-2.5 sm:mt-5 truncate">
+                    <p className="text-white/80 text-[11px] sm:text-base mt-2.5 sm:mt-5 truncate">
                       {card.title}
                     </p>
 
-                    <h3 className="text-lg sm:text-4xl font-black mt-0.5">
+                    <h3 className="text-2xl sm:text-5xl font-black mt-1">
                       {card.value}
                     </h3>
 
-                    <p className="hidden sm:block text-white/70 text-xs mt-1 truncate">
+                    <p className="hidden sm:block text-white/70 text-sm mt-1 truncate">
                       {card.subtitle}
                     </p>
                   </Link>
@@ -329,10 +329,10 @@ export default function Dashboard() {
             <div className="xl:col-span-2 rounded-[24px] sm:rounded-[30px] p-4 sm:p-7 shadow-sm bg-gray-950 text-white">
               <div className="flex items-center justify-between mb-5">
                 <div>
-                  <h2 className="text-lg sm:text-2xl font-black">
+                  <h2 className="text-xl sm:text-3xl font-black">
                     Analytics by Property
                   </h2>
-                  <p className="text-gray-400 text-xs sm:text-sm mt-1">
+                  <p className="text-gray-400 text-sm sm:text-base mt-1">
                     Revenue by property.
                   </p>
                 </div>
@@ -360,25 +360,25 @@ export default function Dashboard() {
                     >
                       <div className="flex justify-between gap-3 mb-3">
                         <div className="min-w-0">
-                          <h3 className="font-black text-sm sm:text-lg truncate">
+                          <h3 className="font-black text-base sm:text-xl truncate">
                             {property.name || property.property_name}
                           </h3>
-                          <p className="text-gray-400 text-xs sm:text-sm truncate">
+                          <p className="text-gray-400 text-sm sm:text-base truncate">
                             {property.location}
                           </p>
                         </div>
 
                         <div className="text-right shrink-0">
-                          <p className="text-[10px] sm:text-xs text-gray-400">
+                          <p className="text-xs sm:text-sm text-gray-400">
                             Revenue
                           </p>
-                          <p className="text-sm sm:text-xl font-black text-yellow-300">
+                          <p className="text-base sm:text-2xl font-black text-yellow-300">
                             RM {property.revenue.toLocaleString()}
                           </p>
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-3 gap-2 text-[11px] sm:text-sm mb-2 text-gray-300">
+                      <div className="grid grid-cols-3 gap-2 text-xs sm:text-base mb-2 text-gray-300">
                         <span>{property.bookings} bookings</span>
                         <span>{property.occupancy}% occ.</span>
                         <span className="text-emerald-300 font-black">
@@ -399,40 +399,40 @@ export default function Dashboard() {
             </div>
 
             <div className="rounded-[24px] sm:rounded-[30px] p-4 sm:p-6 shadow-sm bg-gray-950 text-white">
-              <h2 className="text-lg sm:text-2xl font-black mb-4">
+              <h2 className="text-xl sm:text-3xl font-black mb-4">
                 Quick Actions
               </h2>
 
               <div className="grid grid-cols-2 xl:grid-cols-1 gap-3">
                 <Link
                   to="/reservations"
-                  className="h-16 sm:h-20 bg-[#0D3B66] rounded-2xl font-black flex items-center justify-center gap-2 text-sm"
+                  className="h-20 sm:h-24 bg-[#0D3B66] rounded-2xl font-black flex items-center justify-center gap-2 text-base"
                 >
-                  <Plus size={19} />
+                  <Plus size={20} />
                   Reservation
                 </Link>
 
                 <Link
                   to="/properties"
-                  className="h-16 sm:h-20 bg-white/10 rounded-2xl font-black flex items-center justify-center gap-2 text-sm"
+                  className="h-20 sm:h-24 bg-white/10 rounded-2xl font-black flex items-center justify-center gap-2 text-base"
                 >
-                  <Home size={19} />
+                  <Home size={20} />
                   Properties
                 </Link>
 
                 <Link
                   to="/calendar"
-                  className="h-16 sm:h-20 bg-emerald-500/25 rounded-2xl font-black flex items-center justify-center gap-2 text-sm"
+                  className="h-20 sm:h-24 bg-emerald-500/25 rounded-2xl font-black flex items-center justify-center gap-2 text-base"
                 >
-                  <CalendarCheck size={19} />
+                  <CalendarCheck size={20} />
                   Calendar
                 </Link>
 
                 <Link
                   to="/channels"
-                  className="h-16 sm:h-20 bg-yellow-500/25 rounded-2xl font-black flex items-center justify-center gap-2 text-sm"
+                  className="h-20 sm:h-24 bg-yellow-500/25 rounded-2xl font-black flex items-center justify-center gap-2 text-base"
                 >
-                  <RefreshCw size={19} />
+                  <RefreshCw size={20} />
                   Channels
                 </Link>
               </div>
@@ -442,17 +442,17 @@ export default function Dashboard() {
           <div className="mt-5 sm:mt-7 bg-white rounded-[24px] sm:rounded-[30px] shadow-sm p-4 sm:p-7 border border-gray-100">
             <div className="flex items-center justify-between gap-4 mb-5">
               <div>
-                <h2 className="text-lg sm:text-2xl font-black text-gray-950">
+                <h2 className="text-xl sm:text-3xl font-black text-gray-950">
                   Upcoming Arrivals
                 </h2>
-                <p className="text-xs sm:text-sm text-gray-500">
+                <p className="text-sm sm:text-base text-gray-500">
                   Next guest check-ins.
                 </p>
               </div>
 
               <Link
                 to="/reservations?view=list"
-                className="px-3 py-2 sm:px-5 sm:py-3 rounded-2xl bg-black text-white font-black text-xs sm:text-sm"
+                className="px-4 py-2 sm:px-5 sm:py-3 rounded-2xl bg-black text-white font-black text-sm sm:text-base"
               >
                 View
               </Link>
@@ -483,17 +483,17 @@ export default function Dashboard() {
                         </div>
 
                         <div className="min-w-0">
-                          <h3 className="font-black text-gray-950 truncate">
+                          <h3 className="font-black text-lg text-gray-950 truncate">
                             {reservation.guest_name}
                           </h3>
-                          <p className="text-sm text-gray-500 truncate">
+                          <p className="text-base text-gray-500 truncate">
                             {getPropertyName(reservation.property_id)}
                           </p>
                         </div>
                       </div>
 
                       <span
-                        className="px-2.5 py-1 rounded-full text-[10px] font-black shrink-0"
+                        className="px-2.5 py-1 rounded-full text-xs font-black shrink-0"
                         style={{
                           backgroundColor:
                             CHANNEL_COLORS[reservation.channel] || "#6B7280",
@@ -506,28 +506,28 @@ export default function Dashboard() {
 
                     <div className="grid grid-cols-3 gap-2 mt-4">
                       <div className="rounded-2xl bg-gray-50 p-3">
-                        <p className="text-[10px] text-gray-400 uppercase font-black">
+                        <p className="text-xs text-gray-400 uppercase font-black">
                           In
                         </p>
-                        <p className="font-black text-gray-900 text-xs mt-1">
+                        <p className="font-black text-gray-900 text-sm mt-1">
                           {formatDate(reservation.check_in)}
                         </p>
                       </div>
 
                       <div className="rounded-2xl bg-gray-50 p-3">
-                        <p className="text-[10px] text-gray-400 uppercase font-black">
+                        <p className="text-xs text-gray-400 uppercase font-black">
                           Out
                         </p>
-                        <p className="font-black text-gray-900 text-xs mt-1">
+                        <p className="font-black text-gray-900 text-sm mt-1">
                           {formatDate(reservation.check_out)}
                         </p>
                       </div>
 
                       <div className="rounded-2xl bg-gray-50 p-3">
-                        <p className="text-[10px] text-gray-400 uppercase font-black">
+                        <p className="text-xs text-gray-400 uppercase font-black">
                           Revenue
                         </p>
-                        <p className="font-black text-[#0D3B66] text-xs mt-1">
+                        <p className="font-black text-[#0D3B66] text-sm mt-1">
                           RM {Number(reservation.total_price || 0).toLocaleString()}
                         </p>
                       </div>
