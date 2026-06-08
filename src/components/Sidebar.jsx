@@ -1,10 +1,35 @@
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Sidebar() {
   const location = useLocation();
+
   const [showSettings, setShowSettings] = useState(false);
+  const [showHousekeeping, setShowHousekeeping] = useState(false);
+  const [showFinance, setShowFinance] = useState(false);
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (
+      location.pathname === "/settings" ||
+      location.pathname === "/users" ||
+      location.pathname === "/channels" ||
+      location.pathname === "/properties"
+    ) {
+      setShowSettings(true);
+    }
+
+    if (
+      location.pathname === "/housekeeping" ||
+      location.pathname === "/maintenance"
+    ) {
+      setShowHousekeeping(true);
+    }
+
+    if (location.pathname === "/finance" || location.pathname === "/expenses") {
+      setShowFinance(true);
+    }
+  }, [location.pathname]);
 
   const logout = () => {
     localStorage.removeItem("user");
@@ -12,35 +37,108 @@ export default function Sidebar() {
     window.location.href = "/";
   };
 
+  const isActive = (path) => location.pathname === path;
+
   const menuClass = (path) =>
     `px-4 py-3 rounded-xl transition-all duration-200 ${
-      location.pathname === path
+      isActive(path)
         ? "bg-[#0D3B66] text-white font-semibold"
         : "text-gray-300 hover:bg-gray-800 hover:text-white"
     }`;
 
+  const submenuClass = (path) =>
+    `px-4 py-2.5 rounded-xl transition-all duration-200 text-sm ${
+      isActive(path)
+        ? "bg-[#0D3B66] text-white font-semibold"
+        : "text-gray-400 hover:bg-gray-800 hover:text-white"
+    }`;
+
+  const groupButtonClass = (active) =>
+    `w-full text-left px-4 py-3 rounded-xl transition flex justify-between items-center ${
+      active
+        ? "bg-gray-800 text-white font-semibold"
+        : "text-gray-300 hover:bg-gray-800 hover:text-white"
+    }`;
+
+  const closeMobile = () => setOpen(false);
+
   const menu = (
     <>
-      <div className="mb-10">
+      <div className="mb-8">
         <h1 className="text-3xl font-bold tracking-tight">OmaSync</h1>
         <p className="text-xs text-gray-400 mt-1">Smart Channel Manager</p>
       </div>
 
       <nav className="flex flex-col gap-2">
-        <Link to="/dashboard" onClick={() => setOpen(false)} className={menuClass("/dashboard")}>Dashboard</Link>
-        <Link to="/properties" onClick={() => setOpen(false)} className={menuClass("/properties")}>Properties</Link>
-        <Link to="/reservations" onClick={() => setOpen(false)} className={menuClass("/reservations")}>Reservations</Link>
-        <Link to="/calendar" onClick={() => setOpen(false)} className={menuClass("/calendar")}>Calendar</Link>
-        <Link to="/housekeeping" onClick={() => setOpen(false)} className={menuClass("/housekeeping")}>Housekeeping</Link>
-        <Link to="/maintenance" onClick={() => setOpen(false)} className={menuClass("/maintenance")}>Maintenance</Link>
-        <Link to="/channels" onClick={() => setOpen(false)} className={menuClass("/channels")}>Channels</Link>
-        <Link to="/analytics" onClick={() => setOpen(false)} className={menuClass("/analytics")}>Analytics</Link>
-        <Link to="/finance" onClick={() => setOpen(false)} className={menuClass("/finance")}>Finance</Link>
-        <Link to="/expenses" onClick={() => setOpen(false)} className={menuClass("/expenses")}>Expenses</Link>
+        <Link to="/dashboard" onClick={closeMobile} className={menuClass("/dashboard")}>
+          Dashboard
+        </Link>
+
+        <Link to="/reservations" onClick={closeMobile} className={menuClass("/reservations")}>
+          Reservations
+        </Link>
+
+        <Link to="/calendar" onClick={closeMobile} className={menuClass("/calendar")}>
+          Calendar
+        </Link>
+
+        <button
+          onClick={() => setShowHousekeeping(!showHousekeeping)}
+          className={groupButtonClass(
+            location.pathname === "/housekeeping" ||
+              location.pathname === "/maintenance"
+          )}
+        >
+          <span>Housekeeping</span>
+          <span className="text-xs">{showHousekeeping ? "▲" : "▼"}</span>
+        </button>
+
+        {showHousekeeping && (
+          <div className="ml-4 flex flex-col gap-2">
+            <Link to="/housekeeping" onClick={closeMobile} className={submenuClass("/housekeeping")}>
+              Cleaning
+            </Link>
+
+            <Link to="/maintenance" onClick={closeMobile} className={submenuClass("/maintenance")}>
+              Maintenance
+            </Link>
+          </div>
+        )}
+
+        <Link to="/analytics" onClick={closeMobile} className={menuClass("/analytics")}>
+          Analytics
+        </Link>
+
+        <button
+          onClick={() => setShowFinance(!showFinance)}
+          className={groupButtonClass(
+            location.pathname === "/finance" || location.pathname === "/expenses"
+          )}
+        >
+          <span>Finance</span>
+          <span className="text-xs">{showFinance ? "▲" : "▼"}</span>
+        </button>
+
+        {showFinance && (
+          <div className="ml-4 flex flex-col gap-2">
+            <Link to="/finance" onClick={closeMobile} className={submenuClass("/finance")}>
+              Overview
+            </Link>
+
+            <Link to="/expenses" onClick={closeMobile} className={submenuClass("/expenses")}>
+              Expenses
+            </Link>
+          </div>
+        )}
 
         <button
           onClick={() => setShowSettings(!showSettings)}
-          className="w-full text-left px-4 py-3 rounded-xl text-gray-300 hover:bg-gray-800 hover:text-white transition flex justify-between items-center"
+          className={groupButtonClass(
+            location.pathname === "/settings" ||
+              location.pathname === "/users" ||
+              location.pathname === "/channels" ||
+              location.pathname === "/properties"
+          )}
         >
           <span>Settings</span>
           <span className="text-xs">{showSettings ? "▲" : "▼"}</span>
@@ -48,8 +146,21 @@ export default function Sidebar() {
 
         {showSettings && (
           <div className="ml-4 flex flex-col gap-2">
-            <Link to="/settings" onClick={() => setOpen(false)} className={menuClass("/settings")}>General</Link>
-            <Link to="/users" onClick={() => setOpen(false)} className={menuClass("/users")}>Users</Link>
+            <Link to="/settings" onClick={closeMobile} className={submenuClass("/settings")}>
+              General
+            </Link>
+
+            <Link to="/properties" onClick={closeMobile} className={submenuClass("/properties")}>
+              Properties
+            </Link>
+
+            <Link to="/channels" onClick={closeMobile} className={submenuClass("/channels")}>
+              Channels
+            </Link>
+
+            <Link to="/users" onClick={closeMobile} className={submenuClass("/users")}>
+              Users
+            </Link>
           </div>
         )}
 
@@ -81,12 +192,12 @@ export default function Sidebar() {
         />
       )}
 
-      <aside className="hidden md:block w-64 min-h-screen bg-[#0B1727] text-white p-5 border-r border-gray-800">
+      <aside className="hidden md:block w-64 min-h-screen bg-[#0B1727] text-white p-5 border-r border-gray-800 shrink-0">
         {menu}
       </aside>
 
       <aside
-        className={`md:hidden fixed top-0 left-0 h-full w-64 bg-[#0B1727] text-white p-5 border-r border-gray-800 z-50 transform transition-transform duration-300 ${
+        className={`md:hidden fixed top-0 left-0 h-full w-64 bg-[#0B1727] text-white p-5 border-r border-gray-800 z-50 transform transition-transform duration-300 overflow-y-auto ${
           open ? "translate-x-0" : "-translate-x-full"
         }`}
       >
