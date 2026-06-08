@@ -1,6 +1,8 @@
 import Sidebar from "../components/Sidebar";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import DatePicker from "react-datepicker";
+import { CalendarDays } from "lucide-react";
 import api from "../api/axios";
 
 const CHANNEL_COLORS = {
@@ -50,7 +52,7 @@ export default function Reservations() {
       setForm((prev) => ({
         ...prev,
         check_in: selectedDate,
-        check_out: checkOutDate.toISOString().slice(0, 10),
+        check_out: toInputDate(checkOutDate),
       }));
     }
   }, [selectedDate]);
@@ -63,7 +65,22 @@ export default function Reservations() {
     return [];
   };
 
-  const todayString = new Date().toISOString().slice(0, 10);
+  const toInputDate = (date) => {
+    if (!date) return "";
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const toDateObject = (value) => {
+    if (!value) return null;
+    const [year, month, day] = String(value).slice(0, 10).split("-");
+    return new Date(Number(year), Number(month) - 1, Number(day));
+  };
+
+  const todayString = toInputDate(new Date());
 
   const showToast = (type, message) => {
     setToast({ type, message });
@@ -91,7 +108,7 @@ export default function Reservations() {
   const formatDate = (dateString) => {
     if (!dateString) return "-";
 
-    const date = new Date(String(dateString).slice(0, 10));
+    const date = toDateObject(dateString);
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
@@ -245,6 +262,19 @@ export default function Reservations() {
     }
   };
 
+  const PremiumDateInput = ({ value, onClick, placeholder }) => (
+    <button
+      type="button"
+      onClick={onClick}
+      className="w-full h-12 sm:h-14 border border-slate-300 rounded-2xl px-4 bg-white font-black outline-none flex items-center justify-between text-left hover:border-slate-500 hover:shadow-md transition"
+    >
+      <span className={value ? "text-gray-950" : "text-gray-400"}>
+        {value || placeholder}
+      </span>
+      <CalendarDays size={19} className="text-slate-500" />
+    </button>
+  );
+
   return (
     <div className="min-h-screen bg-slate-300 lg:flex">
       <Sidebar />
@@ -353,13 +383,18 @@ export default function Reservations() {
                       Check In
                     </label>
 
-                    <input
-                      type="date"
-                      value={form.check_in}
-                      onChange={(e) =>
-                        setForm({ ...form, check_in: e.target.value })
+                    <DatePicker
+                      selected={toDateObject(form.check_in)}
+                      onChange={(date) =>
+                        setForm({ ...form, check_in: toInputDate(date) })
                       }
-                      className="w-full h-12 sm:h-14 border border-slate-300 rounded-2xl px-4 bg-white font-bold outline-none"
+                      dateFormat="dd/MM/yyyy"
+                      placeholderText="Select check-in"
+                      customInput={<PremiumDateInput />}
+                      calendarClassName="omasync-datepicker"
+                      popperClassName="omasync-datepicker-popper"
+                      wrapperClassName="w-full"
+                      shouldCloseOnSelect
                     />
                   </div>
 
@@ -368,13 +403,19 @@ export default function Reservations() {
                       Check Out
                     </label>
 
-                    <input
-                      type="date"
-                      value={form.check_out}
-                      onChange={(e) =>
-                        setForm({ ...form, check_out: e.target.value })
+                    <DatePicker
+                      selected={toDateObject(form.check_out)}
+                      onChange={(date) =>
+                        setForm({ ...form, check_out: toInputDate(date) })
                       }
-                      className="w-full h-12 sm:h-14 border border-slate-300 rounded-2xl px-4 bg-white font-bold outline-none"
+                      dateFormat="dd/MM/yyyy"
+                      placeholderText="Select check-out"
+                      customInput={<PremiumDateInput />}
+                      calendarClassName="omasync-datepicker"
+                      popperClassName="omasync-datepicker-popper"
+                      wrapperClassName="w-full"
+                      minDate={toDateObject(form.check_in)}
+                      shouldCloseOnSelect
                     />
                   </div>
 

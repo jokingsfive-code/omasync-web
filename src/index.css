@@ -8,3 +8,69 @@ body {
   background-color: #f3f4f6;
   color: #111827;
 }
+
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+.omasync-datepicker-popper {
+  z-index: 9999 !important;
+}
+
+.omasync-datepicker {
+  border: 0 !important;
+  border-radius: 24px !important;
+  overflow: hidden !important;
+  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.28) !important;
+  font-family: Montserrat, sans-serif !important;
+}
+
+.omasync-datepicker .react-datepicker__header {
+  background: #020617 !important;
+  border-bottom: 0 !important;
+  padding-top: 18px !important;
+}
+
+.omasync-datepicker .react-datepicker__current-month {
+  color: #ffffff !important;
+  font-weight: 900 !important;
+  font-size: 15px !important;
+}
+
+.omasync-datepicker .react-datepicker__day-name {
+  color: rgba(255, 255, 255, 0.62) !important;
+  font-weight: 800 !important;
+}
+
+.omasync-datepicker .react-datepicker__month {
+  background: #ffffff !important;
+  margin: 12px !important;
+}
+
+.omasync-datepicker .react-datepicker__day {
+  border-radius: 999px !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+}
+
+.omasync-datepicker .react-datepicker__day:hover {
+  background: #e2e8f0 !important;
+}
+
+.omasync-datepicker .react-datepicker__day--selected,
+.omasync-datepicker .react-datepicker__day--keyboard-selected {
+  background: #020617 !important;
+  color: #ffffff !important;
+}
+
+.omasync-datepicker .react-datepicker__day--disabled {
+  color: #cbd5e1 !important;
+}
+
+.omasync-datepicker .react-datepicker__navigation {
+  top: 16px !important;
+}
+
+.omasync-datepicker .react-datepicker__triangle {
+  display: none !important;
+}
