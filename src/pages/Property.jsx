@@ -217,7 +217,7 @@ export default function Property() {
         <button
           type="button"
           onClick={closeForm}
-          className="xl:hidden w-10 h-10 rounded-full bg-[#eef1f5] flex items-center justify-center"
+          className="xl:hidden w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center"
         >
           <X size={18} />
         </button>
@@ -244,7 +244,7 @@ export default function Property() {
               </div>
             ) : (
               <div className="aspect-[4/3] sm:aspect-square flex flex-col items-center justify-center text-gray-500 p-6">
-                <div className="w-16 h-16 rounded-full bg-[#eef1f5] text-gray-700 flex items-center justify-center mb-4">
+                <div className="w-16 h-16 rounded-full bg-slate-200 text-gray-700 flex items-center justify-center mb-4">
                   <ImagePlus size={34} />
                 </div>
 
@@ -307,7 +307,7 @@ export default function Property() {
               className="w-full h-14 px-4 rounded-l-2xl border border-gray-200 bg-white text-base font-bold text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
             />
 
-            <div className="h-14 px-5 rounded-r-2xl bg-[#eef1f5] border border-l-0 border-gray-200 font-black text-gray-500 flex items-center">
+            <div className="h-14 px-5 rounded-r-2xl bg-slate-200 border border-l-0 border-gray-200 font-black text-gray-500 flex items-center">
               RM
             </div>
           </div>
@@ -339,7 +339,7 @@ export default function Property() {
             <button
               type="button"
               onClick={resetForm}
-              className="h-14 px-5 rounded-2xl bg-[#eef1f5] text-gray-900 font-black hover:bg-gray-200 transition"
+              className="h-14 px-5 rounded-2xl bg-slate-200 text-gray-900 font-black hover:bg-gray-200 transition"
             >
               Cancel
             </button>
@@ -444,7 +444,7 @@ export default function Property() {
                           key={property.id}
                           className="group bg-white rounded-[30px] shadow-sm border border-gray-100 hover:shadow-lg transition overflow-hidden"
                         >
-                          <div className="relative aspect-[4/3] bg-[#eef1f5] overflow-hidden">
+                          <div className="relative aspect-[4/3] bg-slate-200 overflow-hidden">
                             {propertyImage ? (
                               <img
                                 src={propertyImage}
@@ -462,7 +462,7 @@ export default function Property() {
                             <div className="absolute top-4 right-4 flex gap-2">
                               <button
                                 onClick={() => startEdit(property)}
-                                className="w-10 h-10 rounded-2xl bg-white/95 text-gray-950 flex items-center justify-center hover:bg-[#eef1f5] shadow-lg transition"
+                                className="w-10 h-10 rounded-2xl bg-white/95 text-gray-950 flex items-center justify-center hover:bg-slate-200 shadow-lg transition"
                               >
                                 <Pencil size={17} />
                               </button>
@@ -498,7 +498,7 @@ export default function Property() {
                                 </p>
                               </div>
 
-                              <div className="w-11 h-11 rounded-2xl bg-[#eef1f5] text-gray-950 flex items-center justify-center shrink-0">
+                              <div className="w-11 h-11 rounded-2xl bg-slate-200 text-gray-950 flex items-center justify-center shrink-0">
                                 <Building2 size={22} />
                               </div>
                             </div>
@@ -526,7 +526,7 @@ export default function Property() {
 
                   {filteredProperties.length === 0 && (
                     <div className="bg-white rounded-[30px] shadow-sm p-10 text-center border border-gray-100">
-                      <div className="w-20 h-20 mx-auto rounded-3xl bg-[#eef1f5] text-gray-700 flex items-center justify-center">
+                      <div className="w-20 h-20 mx-auto rounded-3xl bg-slate-200 text-gray-700 flex items-center justify-center">
                         <Building2 size={38} />
                       </div>
 
@@ -542,7 +542,7 @@ export default function Property() {
 
                   <div className="mt-6 bg-white rounded-[30px] p-5 sm:p-6 shadow-sm border border-gray-100 flex flex-col md:flex-row md:items-center justify-between gap-5">
                     <div className="flex items-center gap-4">
-                      <div className="w-14 h-14 rounded-3xl bg-[#eef1f5] text-gray-950 flex items-center justify-center shrink-0">
+                      <div className="w-14 h-14 rounded-3xl bg-slate-200 text-gray-950 flex items-center justify-center shrink-0">
                         <Home size={28} />
                       </div>
 

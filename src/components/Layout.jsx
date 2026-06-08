@@ -5,7 +5,7 @@ export default function Layout({ children }) {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-[#eef1f5]">
+    <div className="flex min-h-screen bg-slate-200">
 
       {/* TOP BAR MOBILE */}
       <div className="md:hidden fixed top-0 left-0 right-0 bg-slate-900 text-white p-4 flex justify-between items-center z-50">

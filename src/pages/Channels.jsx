@@ -223,7 +223,7 @@ export default function Channels() {
         <button
           type="button"
           onClick={closeForm}
-          className="xl:hidden w-9 h-9 rounded-full bg-[#eef1f5] flex items-center justify-center"
+          className="xl:hidden w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center"
         >
           <X size={17} />
         </button>
@@ -313,7 +313,7 @@ export default function Channels() {
             <button
               type="button"
               onClick={resetForm}
-              className="h-12 sm:h-14 px-4 rounded-2xl bg-[#eef1f5] text-gray-900 font-black text-sm"
+              className="h-12 sm:h-14 px-4 rounded-2xl bg-slate-200 text-gray-900 font-black text-sm"
             >
               Cancel
             </button>
@@ -366,7 +366,7 @@ export default function Channels() {
 
             <div className="w-full grid grid-cols-2 gap-3">
               <div className="bg-white rounded-[22px] border border-gray-100 shadow-sm p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-[#eef1f5] text-gray-950 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-2xl bg-slate-200 text-gray-950 flex items-center justify-center">
                   <Wifi size={20} />
                 </div>
 
@@ -450,7 +450,7 @@ export default function Channels() {
                     </p>
                   </div>
 
-                  <div className="px-3 py-2 sm:px-5 sm:py-3 rounded-2xl bg-[#eef1f5] text-gray-950 font-black text-xs sm:text-base">
+                  <div className="px-3 py-2 sm:px-5 sm:py-3 rounded-2xl bg-slate-200 text-gray-950 font-black text-xs sm:text-base">
                     {sources.length}
                   </div>
                 </div>
@@ -462,7 +462,7 @@ export default function Channels() {
                   </div>
                 ) : sources.length === 0 ? (
                   <div className="bg-gray-50 rounded-[22px] p-6 text-center">
-                    <div className="w-14 h-14 mx-auto rounded-3xl bg-[#eef1f5] text-gray-700 flex items-center justify-center">
+                    <div className="w-14 h-14 mx-auto rounded-3xl bg-slate-200 text-gray-700 flex items-center justify-center">
                       <Link2 size={28} />
                     </div>
 
@@ -516,7 +516,7 @@ export default function Channels() {
                                 className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-black mt-1 ${
                                   source.is_active
                                     ? "bg-emerald-100 text-emerald-700"
-                                    : "bg-[#eef1f5] text-gray-600"
+                                    : "bg-slate-200 text-gray-600"
                                 }`}
                               >
                                 <CheckCircle2 size={11} />
@@ -546,7 +546,7 @@ export default function Channels() {
                           <div className="grid grid-cols-3 gap-2 mt-3">
                             <button
                               onClick={() => startEdit(source)}
-                              className="h-10 rounded-xl bg-[#eef1f5] text-gray-900 font-black flex items-center justify-center"
+                              className="h-10 rounded-xl bg-slate-200 text-gray-900 font-black flex items-center justify-center"
                             >
                               <Edit3 size={15} />
                             </button>

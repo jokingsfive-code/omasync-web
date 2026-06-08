@@ -448,7 +448,7 @@ export default function Analytics() {
                             </p>
                           </div>
 
-                          <div className="h-4 bg-[#eef1f5] rounded-full overflow-hidden">
+                          <div className="h-4 bg-slate-200 rounded-full overflow-hidden">
                             <div
                               className="h-full rounded-full"
                               style={{
@@ -501,7 +501,7 @@ export default function Analytics() {
                             </p>
                           </div>
 
-                          <div className="h-3.5 bg-[#eef1f5] rounded-full overflow-hidden">
+                          <div className="h-3.5 bg-slate-200 rounded-full overflow-hidden">
                             <div
                               className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-600"
                               style={{ width: `${width}%` }}
