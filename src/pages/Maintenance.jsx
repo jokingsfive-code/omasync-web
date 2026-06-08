@@ -286,14 +286,14 @@ export default function Maintenance() {
   ];
 
   const fieldClass =
-    "h-12 sm:h-14 w-full min-w-0 max-w-full px-4 rounded-2xl border border-gray-200 bg-white text-sm font-bold text-gray-900 outline-none appearance-none focus:border-black focus:ring-4 focus:ring-black/5 transition";
+    "h-11 sm:h-14 w-full min-w-0 max-w-full px-4 rounded-2xl border border-gray-200 bg-white text-[16px] font-bold text-gray-900 outline-none appearance-none focus:border-black focus:ring-4 focus:ring-black/5 transition";
 
   const TicketForm = () => (
-    <div className="w-full max-w-full overflow-visible bg-white rounded-[28px] sm:rounded-[34px] border border-gray-100 shadow-sm p-4 sm:p-7 mb-5 sm:mb-7">
-      <div className="flex items-start justify-between gap-3 mb-5">
+    <div className="w-full max-w-full overflow-visible bg-white rounded-[24px] sm:rounded-[34px] border border-gray-100 shadow-sm p-3.5 sm:p-7 mb-5 sm:mb-7">
+      <div className="flex items-start justify-between gap-3 mb-4 sm:mb-5">
         <div className="flex items-center gap-3 min-w-0">
-          <div className="w-11 h-11 shrink-0 rounded-2xl bg-black text-white flex items-center justify-center shadow-lg shadow-black/10">
-            <Plus size={20} />
+          <div className="w-10 h-10 sm:w-11 sm:h-11 shrink-0 rounded-2xl bg-black text-white flex items-center justify-center shadow-lg shadow-black/10">
+            <Plus size={19} />
           </div>
 
           <div className="min-w-0">
@@ -317,7 +317,7 @@ export default function Maintenance() {
 
       <form
         onSubmit={saveTicket}
-        className="w-full min-w-0 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3"
+        className="w-full min-w-0 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2.5 sm:gap-3"
       >
         <select
           value={form.property_id}
@@ -416,13 +416,13 @@ export default function Maintenance() {
           onChange={(e) => setForm({ ...form, description: e.target.value })}
           placeholder="Issue description / notes"
           rows="4"
-          className="w-full min-w-0 max-w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm font-semibold text-gray-900 outline-none resize-none focus:border-black focus:ring-4 focus:ring-black/5 transition sm:col-span-2 xl:col-span-3"
+          className="w-full min-w-0 max-w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-[16px] font-semibold text-gray-900 outline-none resize-none focus:border-black focus:ring-4 focus:ring-black/5 transition sm:col-span-2 xl:col-span-3"
         />
 
         <div className="flex gap-2 sm:col-span-2 xl:col-span-1">
           <button
             type="submit"
-            className="flex-1 h-12 sm:h-full min-h-12 bg-black text-white rounded-2xl font-black text-sm sm:text-base active:scale-[0.98]"
+            className="flex-1 h-11 sm:h-full min-h-11 bg-black text-white rounded-2xl font-black text-[16px] active:scale-[0.98]"
           >
             {editId ? "Update" : "Create"}
           </button>
@@ -431,7 +431,7 @@ export default function Maintenance() {
             <button
               type="button"
               onClick={resetForm}
-              className="h-12 px-4 rounded-2xl bg-slate-100 text-gray-900 font-black text-sm active:scale-[0.98]"
+              className="h-11 px-4 rounded-2xl bg-slate-100 text-gray-900 font-black text-[16px] active:scale-[0.98]"
             >
               Clear
             </button>
