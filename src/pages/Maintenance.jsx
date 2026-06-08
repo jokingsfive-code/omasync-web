@@ -37,6 +37,8 @@ export default function Maintenance() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
 
+  const today = new Date().toISOString().slice(0, 10);
+
   const [form, setForm] = useState({
     property_id: "",
     title: "",
@@ -45,7 +47,7 @@ export default function Maintenance() {
     status: "Open",
     reported_by: "",
     assigned_to: "",
-    reported_date: new Date().toISOString().slice(0, 10),
+    reported_date: today,
     completed_date: "",
     cost: "",
   });
@@ -94,7 +96,7 @@ export default function Maintenance() {
       status: "Open",
       reported_by: "",
       assigned_to: "",
-      reported_date: new Date().toISOString().slice(0, 10),
+      reported_date: today,
       completed_date: "",
       cost: "",
     });
@@ -105,6 +107,14 @@ export default function Maintenance() {
   const closeForm = () => {
     resetForm();
     setShowForm(false);
+  };
+
+  const handleStatusChange = (value) => {
+    setForm({
+      ...form,
+      status: value,
+      completed_date: value === "Completed" ? form.completed_date || today : "",
+    });
   };
 
   const saveTicket = async (e) => {
@@ -126,7 +136,7 @@ export default function Maintenance() {
         assigned_to: form.assigned_to || null,
         reported_date: form.reported_date || null,
         completed_date:
-          form.status === "Completed" ? form.completed_date || null : null,
+          form.status === "Completed" ? form.completed_date || today : null,
         cost: form.cost || 0,
       };
 
@@ -160,8 +170,8 @@ export default function Maintenance() {
       status: ticket.status || "Open",
       reported_by: ticket.reported_by || "",
       assigned_to: ticket.assigned_to || "",
-      reported_date: ticket.reported_date || "",
-      completed_date: ticket.completed_date || "",
+      reported_date: ticket.reported_date || today,
+      completed_date: ticket.status === "Completed" ? ticket.completed_date || today : "",
       cost: ticket.cost || "",
     });
 
@@ -192,10 +202,7 @@ export default function Maintenance() {
         reported_by: ticket.reported_by || null,
         assigned_to: ticket.assigned_to || null,
         reported_date: ticket.reported_date || null,
-        completed_date:
-          status === "Completed"
-            ? new Date().toISOString().slice(0, 10)
-            : null,
+        completed_date: status === "Completed" ? today : null,
         cost: ticket.cost || 0,
       });
 
@@ -217,17 +224,6 @@ export default function Maintenance() {
   const formatDate = (value) => {
     if (!value) return "-";
     return String(value).slice(0, 10);
-  };
-
-  const handleStatusChange = (value) => {
-    setForm({
-      ...form,
-      status: value,
-      completed_date:
-        value === "Completed"
-          ? form.completed_date || new Date().toISOString().slice(0, 10)
-          : "",
-    });
   };
 
   const openTickets = tickets.filter((ticket) => ticket.status === "Open");
@@ -274,17 +270,17 @@ export default function Maintenance() {
   ];
 
   const fieldClass =
-    "h-12 sm:h-14 w-full px-4 rounded-2xl border border-gray-200 bg-white text-sm font-bold text-gray-900 outline-none focus:border-black focus:ring-4 focus:ring-black/5 transition";
+    "h-12 sm:h-14 w-full min-w-0 max-w-full px-4 rounded-2xl border border-gray-200 bg-white text-sm font-bold text-gray-900 outline-none appearance-none focus:border-black focus:ring-4 focus:ring-black/5 transition";
 
   const TicketForm = () => (
-    <div className="bg-white rounded-[28px] sm:rounded-[34px] border border-gray-100 shadow-sm p-4 sm:p-7 mb-5 sm:mb-7">
+    <div className="w-full max-w-full overflow-hidden bg-white rounded-[28px] sm:rounded-[34px] border border-gray-100 shadow-sm p-4 sm:p-7 mb-5 sm:mb-7">
       <div className="flex items-start justify-between gap-3 mb-5">
-        <div className="flex items-center gap-3">
-          <div className="w-11 h-11 rounded-2xl bg-black text-white flex items-center justify-center shadow-lg shadow-black/10">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-11 h-11 shrink-0 rounded-2xl bg-black text-white flex items-center justify-center shadow-lg shadow-black/10">
             <Plus size={20} />
           </div>
 
-          <div>
+          <div className="min-w-0">
             <h2 className="text-xl sm:text-2xl font-black text-gray-950">
               {editId ? "Edit Ticket" : "New Ticket"}
             </h2>
@@ -297,7 +293,7 @@ export default function Maintenance() {
         <button
           type="button"
           onClick={closeForm}
-          className="w-9 h-9 rounded-full bg-slate-100 text-gray-700 flex items-center justify-center active:scale-95"
+          className="w-9 h-9 shrink-0 rounded-full bg-slate-100 text-gray-700 flex items-center justify-center active:scale-95"
         >
           <X size={17} />
         </button>
@@ -305,7 +301,7 @@ export default function Maintenance() {
 
       <form
         onSubmit={saveTicket}
-        className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3"
+        className="w-full min-w-0 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3"
       >
         <select
           value={form.property_id}
@@ -394,7 +390,7 @@ export default function Maintenance() {
           onChange={(e) => setForm({ ...form, description: e.target.value })}
           placeholder="Issue description / notes"
           rows="4"
-          className="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm font-semibold text-gray-900 outline-none resize-none focus:border-black focus:ring-4 focus:ring-black/5 transition sm:col-span-2 xl:col-span-3"
+          className="w-full min-w-0 max-w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm font-semibold text-gray-900 outline-none resize-none focus:border-black focus:ring-4 focus:ring-black/5 transition sm:col-span-2 xl:col-span-3"
         />
 
         <div className="flex gap-2 sm:col-span-2 xl:col-span-1">
@@ -558,7 +554,7 @@ export default function Maintenance() {
     <div className="min-h-screen bg-[#f7f8fb] lg:flex">
       <Sidebar />
 
-      <main className="min-h-screen flex-1 w-full px-4 sm:px-6 lg:px-8 py-5 lg:py-8">
+      <main className="min-h-screen flex-1 w-full px-4 sm:px-6 lg:px-8 py-5 lg:py-8 overflow-x-hidden">
         <div className="w-full max-w-[1600px] mx-auto">
           {toast && (
             <div className="fixed top-5 right-4 left-4 sm:left-auto sm:right-6 z-50">
