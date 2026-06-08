@@ -11,6 +11,7 @@ import {
   X,
   Loader2,
   Home,
+  Wallet,
 } from "lucide-react";
 import api from "../api/axios";
 
@@ -260,20 +261,23 @@ export default function Maintenance() {
     },
   ];
 
+  const fieldClass =
+    "h-12 sm:h-14 w-full px-4 rounded-2xl border border-gray-200 bg-white text-sm font-bold text-gray-900 outline-none focus:border-black focus:ring-4 focus:ring-black/5 transition";
+
   const TicketForm = () => (
-    <div className="bg-white rounded-[24px] sm:rounded-[30px] border border-gray-100 shadow-sm p-4 sm:p-7 mb-5 sm:mb-6">
-      <div className="flex items-start justify-between gap-3 mb-4 sm:mb-6">
+    <div className="bg-white rounded-[28px] sm:rounded-[34px] border border-gray-100 shadow-sm p-4 sm:p-7 mb-5 sm:mb-7">
+      <div className="flex items-start justify-between gap-3 mb-5">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-black text-white flex items-center justify-center">
+          <div className="w-11 h-11 rounded-2xl bg-black text-white flex items-center justify-center shadow-lg shadow-black/10">
             <Plus size={20} />
           </div>
 
           <div>
-            <h2 className="text-lg sm:text-2xl font-black text-gray-950">
+            <h2 className="text-xl sm:text-2xl font-black text-gray-950">
               {editId ? "Edit Ticket" : "New Ticket"}
             </h2>
             <p className="text-xs sm:text-sm text-gray-500">
-              Log property repair issue.
+              Log repair issue with cost and status.
             </p>
           </div>
         </div>
@@ -281,17 +285,20 @@ export default function Maintenance() {
         <button
           type="button"
           onClick={closeForm}
-          className="xl:hidden w-9 h-9 rounded-full bg-slate-200 flex items-center justify-center"
+          className="w-9 h-9 rounded-full bg-slate-100 text-gray-700 flex items-center justify-center active:scale-95"
         >
           <X size={17} />
         </button>
       </div>
 
-      <form onSubmit={saveTicket} className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+      <form
+        onSubmit={saveTicket}
+        className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3"
+      >
         <select
           value={form.property_id}
           onChange={(e) => setForm({ ...form, property_id: e.target.value })}
-          className="h-12 sm:h-14 px-4 rounded-2xl border border-gray-200 bg-white text-sm sm:text-base font-bold outline-none"
+          className={fieldClass}
         >
           <option value="">Select Property</option>
           {properties.map((property) => (
@@ -305,13 +312,13 @@ export default function Maintenance() {
           value={form.title}
           onChange={(e) => setForm({ ...form, title: e.target.value })}
           placeholder="Issue title"
-          className="h-12 sm:h-14 px-4 rounded-2xl border border-gray-200 bg-white text-sm sm:text-base font-bold outline-none sm:col-span-1 xl:col-span-2"
+          className={`${fieldClass} xl:col-span-2`}
         />
 
         <select
           value={form.priority}
           onChange={(e) => setForm({ ...form, priority: e.target.value })}
-          className="h-12 sm:h-14 px-4 rounded-2xl border border-gray-200 bg-white text-sm sm:text-base font-bold outline-none"
+          className={fieldClass}
         >
           <option>Low</option>
           <option>Medium</option>
@@ -322,7 +329,7 @@ export default function Maintenance() {
         <select
           value={form.status}
           onChange={(e) => setForm({ ...form, status: e.target.value })}
-          className="h-12 sm:h-14 px-4 rounded-2xl border border-gray-200 bg-white text-sm sm:text-base font-bold outline-none"
+          className={fieldClass}
         >
           <option>Open</option>
           <option>In Progress</option>
@@ -334,14 +341,14 @@ export default function Maintenance() {
           value={form.reported_by}
           onChange={(e) => setForm({ ...form, reported_by: e.target.value })}
           placeholder="Reported by"
-          className="h-12 sm:h-14 px-4 rounded-2xl border border-gray-200 bg-white text-sm font-bold outline-none"
+          className={fieldClass}
         />
 
         <input
           value={form.assigned_to}
           onChange={(e) => setForm({ ...form, assigned_to: e.target.value })}
           placeholder="Assigned to"
-          className="h-12 sm:h-14 px-4 rounded-2xl border border-gray-200 bg-white text-sm font-bold outline-none"
+          className={fieldClass}
         />
 
         <input
@@ -349,14 +356,14 @@ export default function Maintenance() {
           value={form.cost}
           onChange={(e) => setForm({ ...form, cost: e.target.value })}
           placeholder="Cost RM"
-          className="h-12 sm:h-14 px-4 rounded-2xl border border-gray-200 bg-white text-sm font-bold outline-none"
+          className={fieldClass}
         />
 
         <input
           type="date"
           value={form.reported_date}
           onChange={(e) => setForm({ ...form, reported_date: e.target.value })}
-          className="h-12 sm:h-14 px-4 rounded-2xl border border-gray-200 bg-white text-sm font-bold outline-none"
+          className={fieldClass}
         />
 
         <input
@@ -365,21 +372,21 @@ export default function Maintenance() {
           onChange={(e) =>
             setForm({ ...form, completed_date: e.target.value })
           }
-          className="h-12 sm:h-14 px-4 rounded-2xl border border-gray-200 bg-white text-sm font-bold outline-none"
+          className={fieldClass}
         />
 
         <textarea
           value={form.description}
           onChange={(e) => setForm({ ...form, description: e.target.value })}
           placeholder="Issue description / notes"
-          rows="3"
-          className="px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm font-semibold outline-none resize-none sm:col-span-2 xl:col-span-3"
+          rows="4"
+          className="w-full px-4 py-3 rounded-2xl border border-gray-200 bg-white text-sm font-semibold text-gray-900 outline-none resize-none focus:border-black focus:ring-4 focus:ring-black/5 transition sm:col-span-2 xl:col-span-3"
         />
 
         <div className="flex gap-2 sm:col-span-2 xl:col-span-1">
           <button
             type="submit"
-            className="flex-1 h-12 sm:h-full min-h-12 bg-black text-white rounded-2xl font-black text-sm sm:text-base"
+            className="flex-1 h-12 sm:h-full min-h-12 bg-black text-white rounded-2xl font-black text-sm sm:text-base active:scale-[0.98]"
           >
             {editId ? "Update" : "Create"}
           </button>
@@ -388,9 +395,9 @@ export default function Maintenance() {
             <button
               type="button"
               onClick={resetForm}
-              className="h-12 px-4 rounded-2xl bg-slate-200 text-gray-900 font-black text-sm"
+              className="h-12 px-4 rounded-2xl bg-slate-100 text-gray-900 font-black text-sm active:scale-[0.98]"
             >
-              Cancel
+              Clear
             </button>
           )}
         </div>
@@ -399,14 +406,15 @@ export default function Maintenance() {
   );
 
   const TicketCard = ({ ticket, next }) => (
-    <div className="bg-white rounded-[22px] p-4 border border-gray-100 shadow-sm">
+    <div className="bg-white rounded-[24px] p-4 border border-gray-100 shadow-sm hover:shadow-md transition">
       <div className="flex justify-between gap-3 mb-3">
         <div className="min-w-0">
-          <h3 className="font-black text-gray-950 text-base truncate">
+          <h3 className="font-black text-gray-950 text-base leading-tight truncate">
             {ticket.title}
           </h3>
-          <p className="text-xs text-gray-500 mt-1 flex items-center gap-1.5">
-            <Home size={13} />
+
+          <p className="text-xs text-gray-500 mt-1.5 flex items-center gap-1.5 min-w-0">
+            <Home size={13} className="shrink-0" />
             <span className="truncate">
               {getPropertyName(ticket.property_id, ticket.property)}
             </span>
@@ -414,7 +422,7 @@ export default function Maintenance() {
         </div>
 
         <span
-          className={`px-2.5 py-1 rounded-full text-[10px] font-black h-fit ${
+          className={`px-2.5 py-1 rounded-full text-[10px] font-black h-fit shrink-0 ${
             PRIORITY_STYLES[ticket.priority] || "bg-slate-200 text-gray-700"
           }`}
         >
@@ -422,7 +430,7 @@ export default function Maintenance() {
         </span>
       </div>
 
-      <p className="text-xs sm:text-sm text-gray-600 line-clamp-2">
+      <p className="text-xs sm:text-sm text-gray-600 leading-relaxed line-clamp-2">
         {ticket.description || "No description provided."}
       </p>
 
@@ -472,7 +480,7 @@ export default function Maintenance() {
         {next ? (
           <button
             onClick={() => quickStatus(ticket, next)}
-            className="h-10 col-span-1 rounded-xl bg-black text-white font-black text-xs"
+            className="h-10 rounded-xl bg-black text-white font-black text-xs active:scale-[0.98]"
           >
             Move
           </button>
@@ -484,14 +492,14 @@ export default function Maintenance() {
 
         <button
           onClick={() => startEdit(ticket)}
-          className="h-10 rounded-xl bg-blue-50 text-blue-700 font-black flex items-center justify-center"
+          className="h-10 rounded-xl bg-blue-50 text-blue-700 font-black flex items-center justify-center active:scale-[0.98]"
         >
           <Pencil size={15} />
         </button>
 
         <button
           onClick={() => deleteTicket(ticket.id)}
-          className="h-10 rounded-xl bg-red-50 text-red-500 font-black flex items-center justify-center"
+          className="h-10 rounded-xl bg-red-50 text-red-500 font-black flex items-center justify-center active:scale-[0.98]"
         >
           <Trash2 size={15} />
         </button>
@@ -500,7 +508,7 @@ export default function Maintenance() {
   );
 
   const Column = ({ title, items, color, next }) => (
-    <div className="bg-white rounded-[24px] sm:rounded-[30px] shadow-sm p-4 sm:p-6 border border-gray-100">
+    <div className="bg-white rounded-[28px] sm:rounded-[34px] shadow-sm p-4 sm:p-6 border border-gray-100">
       <div className={`h-1.5 rounded-full bg-gradient-to-r ${color} mb-4`} />
 
       <div className="flex justify-between items-center mb-4">
@@ -513,7 +521,7 @@ export default function Maintenance() {
           </p>
         </div>
 
-        <div className="w-10 h-10 rounded-2xl bg-slate-200 flex items-center justify-center font-black text-gray-950">
+        <div className="w-10 h-10 rounded-2xl bg-slate-100 flex items-center justify-center font-black text-gray-950">
           {items.length}
         </div>
       </div>
@@ -555,14 +563,14 @@ export default function Maintenance() {
             </div>
           )}
 
-          <div className="mb-4 sm:mb-7">
-            <div className="pl-20 sm:pl-0 mb-4">
+          <div className="mb-5 sm:mb-7">
+            <div className="pl-16 sm:pl-0 mb-4">
               <div className="flex items-center gap-3">
                 <div className="hidden sm:flex w-11 h-11 rounded-2xl bg-black text-white items-center justify-center">
                   <Wrench size={22} />
                 </div>
 
-                <div>
+                <div className="min-w-0">
                   <h1 className="text-3xl sm:text-4xl font-black text-gray-950 tracking-tight">
                     Maintenance
                   </h1>
@@ -573,17 +581,17 @@ export default function Maintenance() {
               </div>
             </div>
 
-            <div className="w-full grid grid-cols-2 gap-3">
-              <div className="bg-white rounded-[22px] border border-gray-100 shadow-sm p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-slate-200 text-gray-950 flex items-center justify-center">
-                  <Plus size={20} />
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="bg-white rounded-[24px] border border-gray-100 shadow-sm p-4 flex items-center gap-3">
+                <div className="w-11 h-11 rounded-2xl bg-slate-100 text-gray-950 flex items-center justify-center">
+                  <Wallet size={20} />
                 </div>
 
                 <div>
                   <p className="text-[11px] text-gray-500 font-bold">
                     Total Cost
                   </p>
-                  <p className="text-lg font-black text-gray-950">
+                  <p className="text-xl font-black text-gray-950">
                     RM {totalCost.toLocaleString()}
                   </p>
                 </div>
@@ -594,32 +602,32 @@ export default function Maintenance() {
                   resetForm();
                   setShowForm(true);
                 }}
-                className="h-full min-h-[72px] rounded-[22px] bg-black text-white font-black flex items-center justify-center gap-2 text-sm active:scale-[0.98]"
+                className="min-h-[68px] rounded-[24px] bg-black text-white font-black flex items-center justify-center gap-2 text-sm active:scale-[0.98] shadow-lg shadow-black/10"
               >
                 <Plus size={18} />
-                New
+                New Ticket
               </button>
             </div>
           </div>
 
-          <div className="grid grid-cols-4 gap-2.5 sm:gap-5 mb-5 sm:mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-5 mb-5 sm:mb-7">
             {stats.map((stat) => {
               const Icon = stat.icon;
 
               return (
                 <div
                   key={stat.label}
-                  className={`rounded-[20px] sm:rounded-[30px] p-3 sm:p-6 text-white shadow-sm min-h-[100px] sm:min-h-[170px] ${stat.className}`}
+                  className={`rounded-[24px] sm:rounded-[30px] p-4 sm:p-6 text-white shadow-sm min-h-[118px] sm:min-h-[170px] ${stat.className}`}
                 >
-                  <div className="w-8 h-8 sm:w-11 sm:h-11 rounded-2xl bg-white/20 flex items-center justify-center">
+                  <div className="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-white/20 flex items-center justify-center">
                     <Icon size={17} />
                   </div>
 
-                  <p className="text-white/75 text-[9px] sm:text-sm mt-3 sm:mt-5 truncate">
+                  <p className="text-white/75 text-[11px] sm:text-sm mt-4 sm:mt-5 truncate">
                     {stat.label}
                   </p>
 
-                  <h2 className="text-xl sm:text-4xl font-black mt-0.5">
+                  <h2 className="text-2xl sm:text-4xl font-black mt-0.5">
                     {stat.value}
                   </h2>
                 </div>
