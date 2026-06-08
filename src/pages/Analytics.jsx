@@ -23,8 +23,18 @@ const CHANNEL_COLORS = {
 };
 
 const MONTHS = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 export default function Analytics() {
@@ -52,6 +62,7 @@ export default function Analytics() {
   const fetchData = async () => {
     try {
       setLoading(true);
+
       const [propertyRes, reservationRes] = await Promise.all([
         api.get("/properties"),
         api.get("/reservations"),
@@ -82,6 +93,7 @@ export default function Analytics() {
 
   const isSameMonthYear = (dateString) => {
     if (!dateString) return false;
+
     const date = new Date(cleanDate(dateString));
 
     return (
@@ -126,6 +138,7 @@ export default function Analytics() {
   );
 
   const totalBookings = filteredReservations.length;
+
   const averageDailyRate =
     totalBookings > 0 ? totalRevenue / totalBookings : 0;
 
@@ -175,6 +188,7 @@ export default function Analytics() {
     );
 
     const availableNights = daysInSelectedMonth;
+
     const occupancy =
       availableNights > 0 ? (bookedNights / availableNights) * 100 : 0;
 
@@ -263,20 +277,20 @@ export default function Analytics() {
 
   const StatCard = ({ icon: Icon, title, value, subtitle, className }) => (
     <div
-      className={`rounded-[26px] sm:rounded-[30px] p-5 sm:p-6 text-white shadow-sm border border-white/20 ${className}`}
+      className={`rounded-[22px] sm:rounded-[30px] p-4 sm:p-6 text-white shadow-sm border border-white/20 ${className}`}
     >
-      <div className="w-11 h-11 rounded-2xl bg-white/18 flex items-center justify-center">
-        <Icon size={22} />
+      <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white/18 flex items-center justify-center">
+        <Icon size={21} />
       </div>
 
-      <p className="text-white/75 text-xs sm:text-sm mt-5">{title}</p>
+      <p className="text-white/80 text-xs sm:text-sm mt-4 sm:mt-5">{title}</p>
       <h2 className="text-xl sm:text-2xl font-black mt-1 truncate">{value}</h2>
-      {subtitle && <p className="text-white/60 text-xs mt-1">{subtitle}</p>}
+      {subtitle && <p className="text-white/65 text-xs mt-1">{subtitle}</p>}
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-[#f7f8fb] lg:flex">
+    <div className="min-h-screen bg-slate-300 lg:flex">
       <Sidebar />
 
       <main className="min-h-screen flex-1 w-full px-4 sm:px-6 lg:px-8 py-5 lg:py-8">
@@ -289,21 +303,21 @@ export default function Analytics() {
                 </div>
 
                 <div>
-                  <h1 className="text-3xl sm:text-4xl font-black text-gray-950 tracking-tight">
+                  <h1 className="text-4xl sm:text-5xl font-black text-gray-950 tracking-tight">
                     Analytics
                   </h1>
-                  <p className="text-sm sm:text-base text-gray-500">
+                  <p className="text-base sm:text-lg text-gray-600">
                     Occupancy, ADR, RevPAR and revenue performance.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="w-full bg-white rounded-[26px] border border-gray-100 shadow-sm p-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div className="w-full bg-slate-100 rounded-[24px] sm:rounded-[30px] border border-slate-300 shadow-md p-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
               <select
                 value={selectedMonth}
                 onChange={(e) => setSelectedMonth(Number(e.target.value))}
-                className="w-full h-14 px-4 rounded-2xl border border-gray-200 bg-white text-base font-bold text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
+                className="w-full h-14 px-4 rounded-2xl border border-slate-300 bg-white text-base font-black text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
               >
                 {MONTHS.map((month, index) => (
                   <option key={month} value={index}>
@@ -315,7 +329,7 @@ export default function Analytics() {
               <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(Number(e.target.value))}
-                className="w-full h-14 px-4 rounded-2xl border border-gray-200 bg-white text-base font-bold text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
+                className="w-full h-14 px-4 rounded-2xl border border-slate-300 bg-white text-base font-black text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
               >
                 {yearOptions.map((year) => (
                   <option key={year} value={year}>
@@ -327,7 +341,7 @@ export default function Analytics() {
               <select
                 value={selectedProperty}
                 onChange={(e) => setSelectedProperty(e.target.value)}
-                className="w-full h-14 px-4 rounded-2xl border border-gray-200 bg-white text-base font-bold text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
+                className="w-full h-14 px-4 rounded-2xl border border-slate-300 bg-white text-base font-black text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
               >
                 <option value="all">All Properties</option>
 
@@ -341,7 +355,7 @@ export default function Analytics() {
           </div>
 
           {loading ? (
-            <div className="h-[420px] bg-white rounded-[30px] border border-gray-100 shadow-sm flex flex-col items-center justify-center text-gray-500">
+            <div className="h-[420px] bg-slate-100 rounded-[30px] border border-slate-300 shadow-md flex flex-col items-center justify-center text-gray-500">
               <Loader2 className="animate-spin mb-3" size={32} />
               <p className="text-sm">Loading analytics...</p>
             </div>
@@ -398,13 +412,13 @@ export default function Analytics() {
               </div>
 
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 sm:gap-6 mb-6">
-                <div className="bg-white rounded-[30px] border border-gray-100 shadow-sm p-5 sm:p-7">
+                <div className="bg-slate-100 rounded-[24px] sm:rounded-[30px] border border-slate-300 shadow-md p-5 sm:p-7">
                   <div className="flex items-start justify-between gap-4 mb-7">
                     <div>
                       <h2 className="text-xl sm:text-2xl font-black text-gray-950">
                         Revenue by Channel
                       </h2>
-                      <p className="text-sm text-gray-500 mt-1">
+                      <p className="text-sm text-gray-600 mt-1">
                         Based on selected period and property.
                       </p>
                     </div>
@@ -434,10 +448,10 @@ export default function Analytics() {
                               />
 
                               <div className="min-w-0">
-                                <p className="font-black text-gray-900 truncate">
+                                <p className="font-black text-gray-950 truncate">
                                   {item.channel}
                                 </p>
-                                <p className="text-xs text-gray-400">
+                                <p className="text-xs text-gray-500">
                                   {item.bookings} booking(s)
                                 </p>
                               </div>
@@ -448,7 +462,7 @@ export default function Analytics() {
                             </p>
                           </div>
 
-                          <div className="h-4 bg-slate-200 rounded-full overflow-hidden">
+                          <div className="h-4 bg-slate-300 rounded-full overflow-hidden">
                             <div
                               className="h-full rounded-full"
                               style={{
@@ -464,12 +478,12 @@ export default function Analytics() {
                   </div>
                 </div>
 
-                <div className="bg-white rounded-[30px] border border-gray-100 shadow-sm p-5 sm:p-7">
+                <div className="bg-slate-100 rounded-[24px] sm:rounded-[30px] border border-slate-300 shadow-md p-5 sm:p-7">
                   <div className="mb-7">
                     <h2 className="text-xl sm:text-2xl font-black text-gray-950">
                       Monthly Revenue Trend
                     </h2>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-sm text-gray-600 mt-1">
                       Revenue trend across {selectedYear}.
                     </p>
                   </div>
@@ -485,13 +499,13 @@ export default function Analytics() {
                         <div key={item.month}>
                           <div className="flex justify-between gap-4 mb-1.5">
                             <div>
-                              <p className="font-black text-gray-900 text-sm sm:text-base">
+                              <p className="font-black text-gray-950 text-sm sm:text-base">
                                 <span className="sm:hidden">{item.short}</span>
                                 <span className="hidden sm:inline">
                                   {item.month}
                                 </span>
                               </p>
-                              <p className="text-xs text-gray-400">
+                              <p className="text-xs text-gray-500">
                                 {item.bookings} booking(s)
                               </p>
                             </div>
@@ -501,7 +515,7 @@ export default function Analytics() {
                             </p>
                           </div>
 
-                          <div className="h-3.5 bg-slate-200 rounded-full overflow-hidden">
+                          <div className="h-3.5 bg-slate-300 rounded-full overflow-hidden">
                             <div
                               className="h-full rounded-full bg-gradient-to-r from-cyan-400 to-blue-600"
                               style={{ width: `${width}%` }}
@@ -514,7 +528,7 @@ export default function Analytics() {
                 </div>
               </div>
 
-              <div className="bg-gray-950 rounded-[30px] p-5 sm:p-7 shadow-sm text-white">
+              <div className="bg-gray-950 rounded-[24px] sm:rounded-[30px] p-5 sm:p-7 shadow-md text-white">
                 <div className="flex items-start justify-between gap-4 mb-6">
                   <div>
                     <h2 className="text-xl sm:text-2xl font-black">
@@ -540,7 +554,7 @@ export default function Analytics() {
                     return (
                       <div
                         key={property.id}
-                        className="bg-white/[0.06] border border-white/10 rounded-[26px] p-4 sm:p-5"
+                        className="bg-white/[0.06] border border-white/10 rounded-[24px] sm:rounded-[26px] p-4 sm:p-5"
                       >
                         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
                           <div className="min-w-0">
