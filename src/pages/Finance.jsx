@@ -189,7 +189,9 @@ export default function Finance() {
     "Other",
   ].map((channel) => {
     const revenue = filteredReservations
-      .filter((r) => getChannelName(r.channel || r.source || r.platform) === channel)
+      .filter(
+        (r) => getChannelName(r.channel || r.source || r.platform) === channel
+      )
       .reduce((sum, r) => sum + Number(r.total_price || r.amount || 0), 0);
 
     return { channel, revenue };
@@ -205,7 +207,9 @@ export default function Finance() {
 
   const expensesByCategory = expenseCategories.map((category) => {
     const total = filteredExpenses
-      .filter((e) => String(e.category || "").toLowerCase() === category.toLowerCase())
+      .filter(
+        (e) => String(e.category || "").toLowerCase() === category.toLowerCase()
+      )
       .reduce((sum, e) => sum + Number(e.amount || 0), 0);
 
     return { category, total };
@@ -254,7 +258,10 @@ export default function Finance() {
   );
 
   const recentRevenue = [...filteredReservations]
-    .sort((a, b) => new Date(cleanDate(b.check_in)) - new Date(cleanDate(a.check_in)))
+    .sort(
+      (a, b) =>
+        new Date(cleanDate(b.check_in)) - new Date(cleanDate(a.check_in))
+    )
     .slice(0, 8);
 
   const recentExpenses = [...filteredExpenses]
@@ -266,20 +273,20 @@ export default function Finance() {
 
   const StatCard = ({ icon: Icon, label, value, subtitle, className }) => (
     <div
-      className={`rounded-[26px] sm:rounded-[30px] p-5 sm:p-6 text-white shadow-sm border border-white/20 ${className}`}
+      className={`rounded-[22px] sm:rounded-[30px] p-4 sm:p-6 text-white shadow-sm border border-white/20 ${className}`}
     >
-      <div className="w-11 h-11 rounded-2xl bg-white/18 flex items-center justify-center">
-        <Icon size={22} />
+      <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white/18 flex items-center justify-center">
+        <Icon size={21} />
       </div>
 
-      <p className="text-white/75 text-xs sm:text-sm mt-5">{label}</p>
+      <p className="text-white/80 text-xs sm:text-sm mt-4 sm:mt-5">{label}</p>
       <h2 className="text-xl sm:text-2xl font-black mt-1 truncate">{value}</h2>
-      {subtitle && <p className="text-white/60 text-xs mt-1">{subtitle}</p>}
+      {subtitle && <p className="text-white/65 text-xs mt-1">{subtitle}</p>}
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-[#f7f8fb] lg:flex">
+    <div className="min-h-screen bg-slate-300 lg:flex">
       <Sidebar />
 
       <main className="min-h-screen flex-1 w-full px-4 sm:px-6 lg:px-8 py-5 lg:py-8">
@@ -292,21 +299,21 @@ export default function Finance() {
                 </div>
 
                 <div>
-                  <h1 className="text-3xl sm:text-4xl font-black text-gray-950 tracking-tight">
+                  <h1 className="text-4xl sm:text-5xl font-black text-gray-950 tracking-tight">
                     Finance
                   </h1>
-                  <p className="text-sm sm:text-base text-gray-500">
+                  <p className="text-base sm:text-lg text-gray-600">
                     Monthly revenue, expenses, reports and invoices.
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="w-full bg-white rounded-[26px] border border-gray-100 shadow-sm p-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+            <div className="w-full bg-slate-100 rounded-[24px] sm:rounded-[30px] border border-slate-300 shadow-md p-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
               <select
                 value={selectedMonth}
                 onChange={(e) => setSelectedMonth(Number(e.target.value))}
-                className="w-full h-14 px-4 rounded-2xl border border-gray-200 bg-white text-base font-bold text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
+                className="w-full h-14 px-4 rounded-2xl border border-slate-300 bg-white text-base font-black text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
               >
                 {MONTHS.map((month, index) => (
                   <option key={month} value={index}>
@@ -318,7 +325,7 @@ export default function Finance() {
               <select
                 value={selectedYear}
                 onChange={(e) => setSelectedYear(Number(e.target.value))}
-                className="w-full h-14 px-4 rounded-2xl border border-gray-200 bg-white text-base font-bold text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
+                className="w-full h-14 px-4 rounded-2xl border border-slate-300 bg-white text-base font-black text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
               >
                 {yearOptions.map((year) => (
                   <option key={year} value={year}>
@@ -330,7 +337,7 @@ export default function Finance() {
               <select
                 value={selectedProperty}
                 onChange={(e) => setSelectedProperty(e.target.value)}
-                className="w-full h-14 px-4 rounded-2xl border border-gray-200 bg-white text-base font-bold text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
+                className="w-full h-14 px-4 rounded-2xl border border-slate-300 bg-white text-base font-black text-gray-950 outline-none focus:ring-2 focus:ring-black/10"
               >
                 <option value="all">All Properties</option>
                 {properties.map((property) => (
@@ -351,13 +358,13 @@ export default function Finance() {
           </div>
 
           {loading ? (
-            <div className="h-[420px] bg-white rounded-[30px] border border-gray-100 shadow-sm flex flex-col items-center justify-center text-gray-500">
+            <div className="h-[420px] bg-slate-100 rounded-[30px] border border-slate-300 shadow-md flex flex-col items-center justify-center text-gray-500">
               <Loader2 className="animate-spin mb-3" size={32} />
               <p className="text-sm">Loading finance...</p>
             </div>
           ) : (
             <>
-              <div className="mb-6 bg-gray-950 text-white rounded-[30px] p-5 sm:p-7 shadow-sm flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5">
+              <div className="mb-6 bg-gray-950 text-white rounded-[24px] sm:rounded-[30px] p-5 sm:p-7 shadow-md flex flex-col xl:flex-row xl:items-center xl:justify-between gap-5">
                 <div>
                   <p className="text-gray-400 text-sm font-bold">
                     Active Finance Period
@@ -366,7 +373,8 @@ export default function Finance() {
                     {MONTHS[selectedMonth].toUpperCase()} {selectedYear}
                   </h2>
                   <p className="text-gray-400 text-sm mt-2 max-w-2xl">
-                    Use Monthly PDF for owner report and Invoice PDF for guest billing.
+                    Use Monthly PDF for owner report and Invoice PDF for guest
+                    billing.
                   </p>
                 </div>
 
@@ -400,7 +408,9 @@ export default function Finance() {
                   icon={TrendingUp}
                   label="Net Profit"
                   value={formatCurrency(netProfit)}
-                  subtitle={netProfit >= 0 ? "Positive profit" : "Loss this month"}
+                  subtitle={
+                    netProfit >= 0 ? "Positive profit" : "Loss this month"
+                  }
                   className={
                     netProfit >= 0
                       ? "bg-gradient-to-br from-emerald-500 to-emerald-700"
@@ -425,25 +435,27 @@ export default function Finance() {
                 />
               </div>
 
-              <div className="bg-white rounded-[30px] border border-gray-100 shadow-sm p-5 sm:p-7 mb-6">
+              <div className="bg-slate-100 rounded-[24px] sm:rounded-[30px] border border-slate-300 shadow-md p-5 sm:p-7 mb-6">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-6">
                   <div>
                     <h2 className="text-xl sm:text-2xl font-black text-gray-950">
                       Invoice Center
                     </h2>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-sm text-gray-600 mt-1">
                       Download invoice PDF for each reservation.
                     </p>
                   </div>
 
-                  <div className="px-5 py-3 rounded-2xl bg-slate-200 text-gray-950 font-black text-center">
+                  <div className="px-5 py-3 rounded-2xl bg-slate-300 text-gray-950 font-black text-center">
                     {filteredReservations.length} invoice(s)
                   </div>
                 </div>
 
                 {filteredReservations.length === 0 ? (
-                  <div className="bg-gray-50 rounded-[26px] p-8 text-center">
-                    <p className="text-gray-500">No invoices for selected period.</p>
+                  <div className="bg-white rounded-[24px] border border-slate-300 p-8 text-center">
+                    <p className="text-gray-500">
+                      No invoices for selected period.
+                    </p>
                   </div>
                 ) : (
                   <div className="space-y-3">
@@ -457,11 +469,13 @@ export default function Finance() {
                       return (
                         <div
                           key={reservation.id}
-                          className="bg-white rounded-[24px] p-4 border border-gray-100 shadow-sm flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4"
+                          className="bg-white rounded-[24px] p-4 border border-slate-200 shadow-sm flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4"
                         >
                           <div className="min-w-0">
                             <p className="font-black text-gray-950 truncate">
-                              {reservation.guest_name || reservation.name || "Guest"}
+                              {reservation.guest_name ||
+                                reservation.name ||
+                                "Guest"}
                             </p>
                             <p className="text-sm text-gray-500">
                               {getPropertyName(reservation.property_id)}
@@ -504,13 +518,13 @@ export default function Finance() {
               </div>
 
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 sm:gap-6 mb-6">
-                <div className="bg-white rounded-[30px] border border-gray-100 shadow-sm p-5 sm:p-7">
+                <div className="bg-slate-100 rounded-[24px] sm:rounded-[30px] border border-slate-300 shadow-md p-5 sm:p-7">
                   <div className="flex items-start justify-between gap-4 mb-7">
                     <div>
                       <h2 className="text-xl sm:text-2xl font-black text-gray-950">
                         Revenue by Channel
                       </h2>
-                      <p className="text-sm text-gray-500 mt-1">
+                      <p className="text-sm text-gray-600 mt-1">
                         Based on selected period and property.
                       </p>
                     </div>
@@ -538,7 +552,7 @@ export default function Finance() {
                                     CHANNEL_COLORS[item.channel] || "#475569",
                                 }}
                               />
-                              <p className="font-black text-gray-900 truncate">
+                              <p className="font-black text-gray-950 truncate">
                                 {item.channel}
                               </p>
                             </div>
@@ -548,7 +562,7 @@ export default function Finance() {
                             </p>
                           </div>
 
-                          <div className="h-4 bg-slate-200 rounded-full overflow-hidden">
+                          <div className="h-4 bg-slate-300 rounded-full overflow-hidden">
                             <div
                               className="h-full rounded-full"
                               style={{
@@ -564,12 +578,12 @@ export default function Finance() {
                   </div>
                 </div>
 
-                <div className="bg-white rounded-[30px] border border-gray-100 shadow-sm p-5 sm:p-7">
+                <div className="bg-slate-100 rounded-[24px] sm:rounded-[30px] border border-slate-300 shadow-md p-5 sm:p-7">
                   <div className="mb-7">
                     <h2 className="text-xl sm:text-2xl font-black text-gray-950">
                       Expenses by Category
                     </h2>
-                    <p className="text-sm text-gray-500 mt-1">
+                    <p className="text-sm text-gray-600 mt-1">
                       Track operational costs by category.
                     </p>
                   </div>
@@ -584,7 +598,7 @@ export default function Finance() {
                       return (
                         <div key={item.category}>
                           <div className="flex justify-between gap-4 mb-2">
-                            <p className="font-black text-gray-900">
+                            <p className="font-black text-gray-950">
                               {item.category}
                             </p>
                             <p className="font-black text-red-600">
@@ -592,7 +606,7 @@ export default function Finance() {
                             </p>
                           </div>
 
-                          <div className="h-4 bg-slate-200 rounded-full overflow-hidden">
+                          <div className="h-4 bg-slate-300 rounded-full overflow-hidden">
                             <div
                               className="h-full rounded-full bg-gradient-to-r from-red-400 to-orange-500"
                               style={{ width: `${width}%` }}
@@ -605,11 +619,11 @@ export default function Finance() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-[30px] border border-gray-100 shadow-sm p-5 sm:p-7 mb-6">
+              <div className="bg-slate-100 rounded-[24px] sm:rounded-[30px] border border-slate-300 shadow-md p-5 sm:p-7 mb-6">
                 <h2 className="text-xl sm:text-2xl font-black text-gray-950">
                   Property Profit Breakdown
                 </h2>
-                <p className="text-sm text-gray-500 mt-1 mb-6">
+                <p className="text-sm text-gray-600 mt-1 mb-6">
                   Revenue minus expenses by property.
                 </p>
 
@@ -628,7 +642,7 @@ export default function Finance() {
                     return (
                       <div
                         key={property.id}
-                        className="bg-white rounded-[26px] p-4 sm:p-5 border border-gray-100 shadow-sm"
+                        className="bg-white rounded-[24px] sm:rounded-[26px] p-4 sm:p-5 border border-slate-200 shadow-sm"
                       >
                         <div className="flex flex-col sm:flex-row sm:justify-between gap-3 mb-4">
                           <div>
@@ -696,7 +710,7 @@ export default function Finance() {
                   })}
 
                   {revenueByProperty.length === 0 && (
-                    <div className="bg-gray-50 rounded-[26px] p-8 text-center">
+                    <div className="bg-white rounded-[24px] border border-slate-300 p-8 text-center">
                       <p className="text-gray-500">
                         No property finance data available.
                       </p>
@@ -706,16 +720,16 @@ export default function Finance() {
               </div>
 
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-5 sm:gap-6">
-                <div className="bg-white rounded-[30px] border border-gray-100 shadow-sm p-5 sm:p-7">
+                <div className="bg-slate-100 rounded-[24px] sm:rounded-[30px] border border-slate-300 shadow-md p-5 sm:p-7">
                   <h2 className="text-xl sm:text-2xl font-black text-gray-950">
                     Booking Revenue
                   </h2>
-                  <p className="text-sm text-gray-500 mt-1 mb-6">
+                  <p className="text-sm text-gray-600 mt-1 mb-6">
                     Reservation income for selected period.
                   </p>
 
                   {recentRevenue.length === 0 ? (
-                    <div className="bg-gray-50 rounded-[26px] p-8 text-center">
+                    <div className="bg-white rounded-[24px] border border-slate-300 p-8 text-center">
                       <p className="text-gray-500">No revenue records.</p>
                     </div>
                   ) : (
@@ -730,7 +744,7 @@ export default function Finance() {
                         return (
                           <div
                             key={reservation.id}
-                            className="bg-white rounded-[24px] p-4 border border-gray-100 shadow-sm"
+                            className="bg-white rounded-[24px] p-4 border border-slate-200 shadow-sm"
                           >
                             <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
                               <div>
@@ -771,16 +785,16 @@ export default function Finance() {
                   )}
                 </div>
 
-                <div className="bg-white rounded-[30px] border border-gray-100 shadow-sm p-5 sm:p-7">
+                <div className="bg-slate-100 rounded-[24px] sm:rounded-[30px] border border-slate-300 shadow-md p-5 sm:p-7">
                   <h2 className="text-xl sm:text-2xl font-black text-gray-950">
                     Expense Records
                   </h2>
-                  <p className="text-sm text-gray-500 mt-1 mb-6">
+                  <p className="text-sm text-gray-600 mt-1 mb-6">
                     Expenses for selected period.
                   </p>
 
                   {recentExpenses.length === 0 ? (
-                    <div className="bg-gray-50 rounded-[26px] p-8 text-center">
+                    <div className="bg-white rounded-[24px] border border-slate-300 p-8 text-center">
                       <p className="text-gray-500">No expense records.</p>
                     </div>
                   ) : (
@@ -788,7 +802,7 @@ export default function Finance() {
                       {recentExpenses.map((expense) => (
                         <div
                           key={expense.id}
-                          className="bg-white rounded-[24px] p-4 border border-gray-100 shadow-sm"
+                          className="bg-white rounded-[24px] p-4 border border-slate-200 shadow-sm"
                         >
                           <div className="flex flex-col sm:flex-row sm:justify-between gap-3">
                             <div>
