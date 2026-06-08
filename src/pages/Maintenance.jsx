@@ -1,5 +1,7 @@
 import Sidebar from "../components/Sidebar";
 import { useEffect, useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -29,6 +31,19 @@ const STATUS_STYLES = {
   Cancelled: "bg-slate-200 text-gray-600",
 };
 
+const toInputDate = (date) => {
+  if (!date) return "";
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+};
+
+const toDateObject = (value) => {
+  if (!value) return null;
+  return new Date(`${String(value).slice(0, 10)}T00:00:00`);
+};
+
 export default function Maintenance() {
   const [tickets, setTickets] = useState([]);
   const [properties, setProperties] = useState([]);
@@ -37,7 +52,7 @@ export default function Maintenance() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = toInputDate(new Date());
 
   const [form, setForm] = useState({
     property_id: "",
@@ -171,7 +186,8 @@ export default function Maintenance() {
       reported_by: ticket.reported_by || "",
       assigned_to: ticket.assigned_to || "",
       reported_date: ticket.reported_date || today,
-      completed_date: ticket.status === "Completed" ? ticket.completed_date || today : "",
+      completed_date:
+        ticket.status === "Completed" ? ticket.completed_date || today : "",
       cost: ticket.cost || "",
     });
 
@@ -273,7 +289,7 @@ export default function Maintenance() {
     "h-12 sm:h-14 w-full min-w-0 max-w-full px-4 rounded-2xl border border-gray-200 bg-white text-sm font-bold text-gray-900 outline-none appearance-none focus:border-black focus:ring-4 focus:ring-black/5 transition";
 
   const TicketForm = () => (
-    <div className="w-full max-w-full overflow-hidden bg-white rounded-[28px] sm:rounded-[34px] border border-gray-100 shadow-sm p-4 sm:p-7 mb-5 sm:mb-7">
+    <div className="w-full max-w-full overflow-visible bg-white rounded-[28px] sm:rounded-[34px] border border-gray-100 shadow-sm p-4 sm:p-7 mb-5 sm:mb-7">
       <div className="flex items-start justify-between gap-3 mb-5">
         <div className="flex items-center gap-3 min-w-0">
           <div className="w-11 h-11 shrink-0 rounded-2xl bg-black text-white flex items-center justify-center shadow-lg shadow-black/10">
@@ -367,21 +383,31 @@ export default function Maintenance() {
           className={fieldClass}
         />
 
-        <input
-          type="date"
-          value={form.reported_date}
-          onChange={(e) => setForm({ ...form, reported_date: e.target.value })}
+        <DatePicker
+          selected={toDateObject(form.reported_date)}
+          onChange={(date) =>
+            setForm({ ...form, reported_date: toInputDate(date) })
+          }
+          dateFormat="dd MMM yyyy"
+          placeholderText="Reported date"
+          wrapperClassName="w-full"
           className={fieldClass}
+          popperClassName="omasync-datepicker"
+          calendarClassName="omasync-calendar"
         />
 
         {form.status === "Completed" && (
-          <input
-            type="date"
-            value={form.completed_date}
-            onChange={(e) =>
-              setForm({ ...form, completed_date: e.target.value })
+          <DatePicker
+            selected={toDateObject(form.completed_date)}
+            onChange={(date) =>
+              setForm({ ...form, completed_date: toInputDate(date) })
             }
+            dateFormat="dd MMM yyyy"
+            placeholderText="Completed date"
+            wrapperClassName="w-full"
             className={fieldClass}
+            popperClassName="omasync-datepicker"
+            calendarClassName="omasync-calendar"
           />
         )}
 
